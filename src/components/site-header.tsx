@@ -76,7 +76,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
           </Link>
           <button
             onClick={() => setOpen(false)}
-            className="inline-flex items-center gap-3 rounded-full bg-background px-5 py-2.5 text-sm text-foreground"
+            className="inline-flex items-center gap-3 rounded-full bg-surface-foreground px-5 py-2.5 text-sm text-surface"
           >
             <span>Close</span>
             <span className="text-lg leading-none">×</span>
