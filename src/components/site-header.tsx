@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
-  { to: "/about", label: "About" },
+  { to: "/about", label: "About us" },
   { to: "/contact", label: "Contact" },
+  { to: "/book", label: "Book a service" },
 ] as const;
 
 export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }) {
@@ -14,65 +15,99 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
   const onDark = variant === "dark";
 
   return (
-    <header
-      className={`absolute inset-x-0 top-0 z-40 ${onDark ? "text-surface-foreground" : "text-foreground"}`}
-    >
-      <div className="container-page flex items-center justify-between py-6">
-        <Link to="/" className="flex items-center gap-2 font-display text-lg font-semibold tracking-tight">
-          <span className="inline-block h-2 w-2 rounded-full bg-accent" />
-          DANDY AUTOWORKS
-        </Link>
-
-        <nav className="hidden items-center gap-8 text-sm md:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="opacity-80 transition hover:opacity-100"
-              activeProps={{ className: "opacity-100 font-medium" }}
-              activeOptions={{ exact: n.to === "/" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden md:block">
+    <>
+      <header
+        className={cn(
+          "absolute inset-x-0 top-0 z-40",
+          onDark ? "text-surface-foreground" : "text-foreground"
+        )}
+      >
+        <div className="container-page flex items-center justify-between py-7">
           <Link
-            to="/book"
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition hover:brightness-95"
+            to="/"
+            className="font-mono-tag tracking-[0.2em] text-[0.9rem] font-semibold"
           >
-            Book service →
+            MACCITY
           </Link>
-        </div>
 
-        <button
-          aria-label="Menu"
-          className="md:hidden"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </div>
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            className={cn(
+              "group inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm transition",
+              onDark
+                ? "bg-surface-foreground text-surface hover:bg-surface-foreground/90"
+                : "bg-foreground text-background hover:bg-foreground/90"
+            )}
+          >
+            <span>Menu</span>
+            <span className="flex flex-col gap-[3px]">
+              <span className="block h-px w-4 bg-current" />
+              <span className="block h-px w-4 bg-current" />
+            </span>
+          </button>
+        </div>
+      </header>
 
       {open && (
-        <div className="border-t border-border/30 bg-background text-foreground md:hidden">
-          <div className="container-page flex flex-col gap-4 py-6">
-            {nav.map((n) => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="text-base">
-                {n.label}
-              </Link>
-            ))}
+        <div className="fixed inset-0 z-50 bg-foreground text-background">
+          <div className="container-page flex items-center justify-between py-7">
             <Link
-              to="/book"
+              to="/"
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground"
+              className="font-mono-tag tracking-[0.2em] text-[0.9rem] font-semibold"
             >
-              Book service →
+              MACCITY
             </Link>
+            <button
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center gap-3 rounded-full bg-background px-5 py-2.5 text-sm text-foreground"
+            >
+              <span>Close</span>
+              <span className="text-lg leading-none">×</span>
+            </button>
+          </div>
+
+          <div className="container-page mt-16 grid gap-12 md:grid-cols-12">
+            <nav className="flex flex-col gap-2 md:col-span-8">
+              {nav.map((n, i) => (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  onClick={() => setOpen(false)}
+                  className="group flex items-baseline gap-6 border-b border-background/15 py-5 transition hover:opacity-80"
+                >
+                  <span className="font-mono-tag opacity-50">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-display text-5xl leading-none md:text-7xl">
+                    {n.label}
+                  </span>
+                </Link>
+              ))}
+            </nav>
+
+            <div className="md:col-span-4">
+              <p className="font-mono-tag opacity-50">↳ Workshop</p>
+              <p className="mt-4 text-sm leading-relaxed opacity-90">
+                12 Greens Road<br />
+                Dandenong South, VIC 3175<br />
+                Australia
+              </p>
+              <p className="mt-8 font-mono-tag opacity-50">↳ Hours</p>
+              <p className="mt-4 text-sm leading-relaxed opacity-90">
+                Mon – Fri · 7:30 – 17:30<br />
+                Sat · 8:00 – 13:00
+              </p>
+              <p className="mt-8 font-mono-tag opacity-50">↳ Contact</p>
+              <p className="mt-4 text-sm leading-relaxed opacity-90">
+                (03) 9000 1234<br />
+                hello@maccity.com.au
+              </p>
+            </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
