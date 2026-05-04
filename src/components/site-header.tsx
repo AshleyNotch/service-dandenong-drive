@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -25,9 +26,8 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
         <div className="container-page flex items-center justify-between py-7">
           <Link
             to="/"
-            className="font-mono-tag tracking-[0.2em] text-[0.9rem] font-semibold"
           >
-            MACCITY
+            <img src={logo} alt="Maccity" className="h-8 w-auto" />
           </Link>
 
           <button
@@ -60,9 +60,8 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
           <Link
             to="/"
             onClick={() => setOpen(false)}
-            className="font-mono-tag tracking-[0.2em] text-[0.9rem] font-semibold"
           >
-            MACCITY
+            <img src={logo} alt="Maccity" className="h-8 w-auto" />
           </Link>
           <button
             onClick={() => setOpen(false)}
