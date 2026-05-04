@@ -34,11 +34,11 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
               : "bg-background/90 backdrop-blur-sm text-foreground"
         )}
       >
-        <div className="container-page flex items-center justify-between py-7">
+        <div className="container-page flex items-center justify-between py-3">
           <Link
             to="/"
           >
-            <img src={logo} alt="Maccity" className="h-20 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
+            <img src={logo} alt="Maccity" className="h-12 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
           </Link>
 
           <button
