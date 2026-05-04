@@ -34,7 +34,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
               : "bg-background/90 backdrop-blur-sm text-foreground"
         )}
       >
-        <div className="container-page flex items-center justify-between py-3">
+        <div className="container-page flex items-center justify-between py-5">
           <Link
             to="/"
           >
