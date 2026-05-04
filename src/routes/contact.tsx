@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import heroImg from "@/assets/about-team.jpg";
@@ -15,11 +16,27 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const blocks = [
-  { label: "Workshop", value: ["1/7 England Street", "Dandenong South, VIC 3175"] },
-  { label: "Phone", value: ["+61 426 899 272"] },
-  { label: "Email", value: ["info@maccity.com.au"] },
-  { label: "Hours", value: ["Mon–Fri · 7:30 – 17:30", "Sat · 8:00 – 13:00"] },
+const details = [
+  {
+    icon: <MapPin size={18} />,
+    label: "Workshop",
+    lines: ["1/7 England Street", "Dandenong South, VIC 3175"],
+  },
+  {
+    icon: <Phone size={18} />,
+    label: "Phone",
+    lines: ["+61 426 899 272"],
+  },
+  {
+    icon: <Mail size={18} />,
+    label: "Email",
+    lines: ["info@maccity.com.au"],
+  },
+  {
+    icon: <Clock size={18} />,
+    label: "Hours",
+    lines: ["Mon – Fri · 7:30 – 17:30", "Saturday · 8:00 – 13:00", "Sunday · Closed"],
+  },
 ];
 
 function ContactPage() {
@@ -49,27 +66,45 @@ function ContactPage() {
         </div>
       </section>
 
-      <section className="container-page pb-32">
-        <div className="grid gap-px overflow-hidden rounded-2xl border bg-border md:grid-cols-2">
-          {blocks.map((b) => (
-            <div key={b.label} className="bg-card p-10 md:p-14">
-              <p className="font-mono-tag text-muted-foreground">↳ {b.label}</p>
-              <div className="mt-4 font-display text-2xl leading-snug md:text-3xl">
-                {b.value.map((line) => (
-                  <div key={line}>{line}</div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+      <section className="container-page py-24">
+        <div className="grid gap-10 md:grid-cols-12 md:items-stretch">
 
-        <div className="mt-16 flex justify-center">
-          <a
-            href="/#book"
-            className="inline-flex items-center gap-3 rounded-full bg-foreground px-8 py-4 text-sm text-background hover:opacity-90"
-          >
-            Book a service ↳
-          </a>
+          {/* Contact details */}
+          <div className="flex flex-col justify-between gap-6 md:col-span-5">
+            {details.map((d) => (
+              <div key={d.label} className="flex items-start gap-4 rounded-2xl border border-white/10 p-7">
+                <span className="mt-0.5 shrink-0 text-[#fcbb04]">{d.icon}</span>
+                <div>
+                  <p className="font-mono-tag text-xs text-muted-foreground">{d.label}</p>
+                  {d.lines.map((line) => (
+                    <p key={line} className="mt-1 text-sm leading-relaxed">{line}</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <a
+              href="/#book"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#fcbb04] px-6 py-3.5 text-sm font-semibold text-black transition hover:opacity-90"
+            >
+              Book a service ↳
+            </a>
+          </div>
+
+          {/* Map */}
+          <div className="overflow-hidden rounded-2xl md:col-span-7">
+            <iframe
+              title="Maccity Car Workshop location"
+              src="https://maps.google.com/maps?q=1+England+Street+Dandenong+South+VIC+3175&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: "480px" }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+
         </div>
       </section>
 
