@@ -93,34 +93,6 @@ function Home() {
         </div>
       </section>
 
-      {/* SERVICES — image cards row */}
-      <section className="bg-background pb-24">
-        <div className="container-page">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {services.map((s) => (
-              <Link
-                key={s.slug}
-                to="/services"
-                className="group block"
-              >
-                <div className="relative overflow-hidden rounded-xl">
-                  <img
-                    src={s.img}
-                    alt={s.title}
-                    width={900}
-                    height={900}
-                    loading="lazy"
-                    className="aspect-square w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <h3 className="mt-4 font-display text-xl leading-tight md:text-2xl">
-                  {s.title}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ABOUT BLOCK */}
       <section className="bg-background py-24">
