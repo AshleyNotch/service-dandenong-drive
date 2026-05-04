@@ -77,45 +77,41 @@ function ServicesPage() {
         </div>
       </section>
 
-      <section className="container-page pb-32">
-        <div className="space-y-24">
-          {items.map((it, i) => (
-            <article
-              key={it.n}
-              className={`grid gap-10 md:grid-cols-12 md:items-center ${
-                i % 2 === 1 ? "md:[&>div:first-child]:order-2" : ""
-              }`}
-            >
-              <div className="md:col-span-6">
-                <img
-                  src={it.img}
-                  alt={it.title}
-                  width={900}
-                  height={900}
-                  loading="lazy"
-                  className="aspect-square w-full rounded-xl object-cover"
-                />
-              </div>
-              <div className="md:col-span-6">
-                <p className="font-mono-tag text-muted-foreground">— {it.n}</p>
-                <h2 className="mt-4 font-display text-4xl leading-[1.02] md:text-6xl">
-                  {it.title}
-                </h2>
-                <p className="mt-6 max-w-md text-base text-muted-foreground">{it.body}</p>
-                <ul className="mt-6 space-y-2 text-sm">
-                  {it.points.map((p) => (
-                    <li key={p} className="flex items-center gap-3">
-                      <span className="h-1.5 w-1.5 rounded-full bg-foreground" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="/#book"
-                  className="mt-8 inline-flex items-center gap-3 rounded-full bg-foreground px-6 py-3 text-sm text-background hover:opacity-90"
-                >
-                  Book this service ↳
-                </a>
+      <section className="container-page py-24">
+        <div className="grid gap-5 md:grid-cols-2">
+          {items.map((it) => (
+            <article key={it.n} className="group relative overflow-hidden rounded-2xl">
+              <img
+                src={it.img}
+                alt={it.title}
+                width={900}
+                height={900}
+                loading="lazy"
+                className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+
+              <div className="absolute inset-0 flex flex-col justify-between p-8">
+                <span className="font-mono-tag text-white/40">{it.n}</span>
+                <div>
+                  <h2 className="font-display text-3xl leading-tight text-white md:text-4xl">
+                    {it.title}
+                  </h2>
+                  <p className="mt-3 line-clamp-2 text-sm text-white/60">{it.body}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {it.points.map((p) => (
+                      <span key={p} className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/60">
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                  <a
+                    href="/#book"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#fcbb04] px-5 py-2.5 text-sm font-semibold text-black transition hover:opacity-90"
+                  >
+                    Book this service ↳
+                  </a>
+                </div>
               </div>
             </article>
           ))}
