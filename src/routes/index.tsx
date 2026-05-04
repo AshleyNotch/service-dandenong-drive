@@ -58,7 +58,7 @@ function Home() {
       </section>
 
       {/* MISSION */}
-      <section className="bg-background py-32">
+      <section className="bg-surface py-32 text-surface-foreground">
         <div className="container-page">
           <h2 className="max-w-5xl font-display text-4xl leading-[1.05] md:text-6xl lg:text-7xl">
             Our mission is to keep Melbourne's south-east moving — with{" "}
@@ -69,7 +69,7 @@ function Home() {
           <div className="mt-12">
             <Link
               to="/about"
-              className="inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-3.5 text-sm text-background hover:opacity-90"
+              className="inline-flex items-center gap-3 rounded-full bg-surface-foreground px-7 py-3.5 text-sm text-surface hover:opacity-90"
             >
               About us ↳
             </Link>
