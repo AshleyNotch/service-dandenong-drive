@@ -12,10 +12,10 @@ import teamImg from "@/assets/about-team.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Maccity Car Workshop — Dandenong South" },
-      { name: "description", content: "Independent car workshop in Dandenong South: roadworthy inspections, mechanical repairs, log book servicing and vehicle diagnostics." },
-      { property: "og:title", content: "Maccity Car Workshop — Dandenong South" },
-      { property: "og:description", content: "Honest, dealer-grade car service in Dandenong South. Book online in 60 seconds." },
+      { title: "Mac City — Your Trusted Workshop in Dandenong South" },
+      { name: "description", content: "Mac City is Dandenong South's trusted independent car workshop — delivering roadworthy inspections, log book servicing, mechanical repairs and vehicle diagnostics since 2008. Honest advice, dealer-grade workmanship and transparent pricing. Serving Melbourne's south-east. Book online in 60 seconds." },
+      { property: "og:title", content: "Mac City — Your Trusted Workshop in Dandenong South" },
+      { property: "og:description", content: "Mac City is Dandenong South's trusted independent car workshop — delivering roadworthy inspections, log book servicing, mechanical repairs and vehicle diagnostics since 2008. Honest advice, dealer-grade workmanship and transparent pricing. Serving Melbourne's south-east. Book online in 60 seconds." },
     ],
   }),
   component: Home,
