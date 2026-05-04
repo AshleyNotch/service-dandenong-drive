@@ -63,7 +63,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
       <div
         aria-hidden={!open}
         className={cn(
-          "fixed inset-0 z-50 bg-foreground text-background transition-transform duration-500 ease-in",
+          "fixed inset-0 z-50 bg-surface text-surface-foreground transition-transform duration-500 ease-in",
           open ? "translate-y-0" : "-translate-y-full pointer-events-none"
         )}
       >
