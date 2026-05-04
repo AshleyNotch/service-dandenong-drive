@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Calendar, Clock, Wrench, Car, User, Mail, Phone, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -10,20 +11,20 @@ const SERVICES = [
   "Vehicle Diagnostics",
 ];
 
-const SLOTS_WD_MORNING   = ["7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM"];
-const SLOTS_WD_AFTERNOON = ["12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM"];
-const SLOTS_SAT_MORNING  = ["8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM"];
-const SLOTS_SAT_AFTERNOON= ["12:00 PM","12:30 PM"];
+const SLOTS_WD_MORNING    = ["7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM"];
+const SLOTS_WD_AFTERNOON  = ["12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM"];
+const SLOTS_SAT_MORNING   = ["8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM"];
+const SLOTS_SAT_AFTERNOON = ["12:00 PM","12:30 PM"];
 
-const DAY  = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const MONTH= ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAY   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTH = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface Booking {
-  services: string[];
   date:     Date   | null;
   time:     string | null;
+  services: string[];
   make:     string;
   model:    string;
   year:     string;
@@ -34,7 +35,7 @@ interface Booking {
 }
 
 const empty: Booking = {
-  services: [], date: null, time: null,
+  date: null, time: null, services: [],
   make: "", model: "", year: "", odometer: "",
   name: "", phone: "", email: "",
 };
@@ -50,13 +51,14 @@ function weekMonday(offset: number): Date {
 }
 
 function slotsFor(date: Date) {
-  const isSat = date.getDay() === 6;
-  return isSat
+  return date.getDay() === 6
     ? [{ label: "Morning", times: SLOTS_SAT_MORNING }, { label: "Afternoon", times: SLOTS_SAT_AFTERNOON }]
-    : [{ label: "Morning", times: SLOTS_WD_MORNING  }, { label: "Afternoon", times: SLOTS_WD_AFTERNOON }];
+    : [{ label: "Morning", times: SLOTS_WD_MORNING  }, { label: "Afternoon", times: SLOTS_WD_AFTERNOON  }];
 }
 
-// ─── Input ───────────────────────────────────────────────────────────────────
+// ─── Small pieces ─────────────────────────────────────────────────────────────
+
+const inputCls = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -67,17 +69,24 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-const inputCls = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
+function SummaryRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="mt-0.5 shrink-0 text-[#fcbb04]">{icon}</span>
+      <div className="min-w-0">{children}</div>
+    </div>
+  );
+}
 
-// ─── Widget ──────────────────────────────────────────────────────────────────
+// ─── Widget ───────────────────────────────────────────────────────────────────
 
 export function BookingWidget() {
-  const [step, setStep]         = useState(1);
-  const [weekOff, setWeekOff]   = useState(0);
-  const [booking, setBooking]   = useState<Booking>(empty);
+  const [step, setStep]           = useState(1);
+  const [weekOff, setWeekOff]     = useState(0);
+  const [booking, setBooking]     = useState<Booking>(empty);
   const [confirmed, setConfirmed] = useState(false);
 
-  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const today  = new Date(); today.setHours(0, 0, 0, 0);
   const monday = weekMonday(weekOff);
   const week   = Array.from({ length: 7 }, (_, i) => { const d = new Date(monday); d.setDate(monday.getDate() + i); return d; });
 
@@ -89,21 +98,23 @@ export function BookingWidget() {
       ? booking.services.filter(x => x !== s)
       : [...booking.services, s]);
 
-  const step1ok = booking.services.length > 0 && booking.date !== null && booking.time !== null;
+  const step1ok = booking.date !== null && booking.time !== null && booking.services.length > 0;
   const step2ok = booking.make.trim() !== "" && booking.model.trim() !== "" && booking.year.trim() !== "";
   const step3ok = booking.name.trim() !== "" && booking.phone.trim() !== "" && booking.email.trim() !== "";
 
-  // ── Confirmed state ──────────────────────────────────────────────────────
+  const summaryDate = booking.date?.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" });
+
+  // ── Confirmed ──────────────────────────────────────────────────────────────
 
   if (confirmed) {
     return (
       <div className="overflow-hidden rounded-2xl border border-white/10">
         <div className="flex min-h-[420px] flex-col items-center justify-center p-12 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#fcbb04]/15 text-3xl">✓</div>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#fcbb04]/15 text-[#fcbb04] text-2xl">✓</div>
           <h3 className="mt-6 font-display text-3xl">Booking received</h3>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
             Thanks {booking.name.split(" ")[0]} — we'll confirm your{" "}
-            {booking.date?.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" })} at {booking.time} slot via{" "}
+            {summaryDate} at {booking.time} slot via{" "}
             <span className="text-foreground">{booking.email}</span>.
           </p>
           <button
@@ -117,19 +128,13 @@ export function BookingWidget() {
     );
   }
 
-  // ── Step labels ──────────────────────────────────────────────────────────
-
   const steps = ["Date & Service", "Your Vehicle", "Your Details"];
-
-  // ── Summary helpers ──────────────────────────────────────────────────────
-
-  const summaryDate = booking.date?.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" });
 
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10">
-      <div className="grid md:grid-cols-[1fr_320px]">
+      <div className="grid md:grid-cols-[1fr_300px]">
 
-        {/* ── LEFT PANEL ─────────────────────────────────────────────────── */}
+        {/* ── LEFT ───────────────────────────────────────────────────────── */}
         <div className="p-8 md:p-10">
 
           {/* Step indicator */}
@@ -142,9 +147,7 @@ export function BookingWidget() {
                 <div key={n} className={cn("flex items-center gap-2 text-xs font-mono-tag transition", active ? "opacity-100" : "opacity-35")}>
                   <span className={cn(
                     "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold",
-                    done   ? "bg-[#fcbb04] text-black" :
-                    active ? "bg-[#fcbb04] text-black" :
-                             "border border-white/20"
+                    done || active ? "bg-[#fcbb04] text-black" : "border border-white/20"
                   )}>
                     {done ? "✓" : n}
                   </span>
@@ -154,41 +157,17 @@ export function BookingWidget() {
             })}
           </div>
 
-          {/* ─ STEP 1 ─────────────────────────────────────────────────────── */}
+          {/* ─ STEP 1 ───────────────────────────────────────────────────── */}
           {step === 1 && (
             <>
-              {/* Services */}
-              <p className="mb-3 font-mono-tag text-xs text-muted-foreground">↳ Select services</p>
-              <div className="mb-8 grid grid-cols-2 gap-2">
-                {SERVICES.map(s => (
-                  <button
-                    key={s}
-                    onClick={() => toggleService(s)}
-                    className={cn(
-                      "rounded-xl border px-4 py-3 text-left text-sm transition",
-                      booking.services.includes(s)
-                        ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
-                        : "border-white/10 hover:border-white/25"
-                    )}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-
-              {/* Date picker header */}
+              {/* Date */}
               <div className="mb-4 flex items-center justify-between">
                 <p className="font-mono-tag text-xs text-muted-foreground">↳ Select a date</p>
                 <div className="flex gap-1">
-                  <button
-                    onClick={() => setWeekOff(w => Math.max(0, w - 1))}
-                    disabled={weekOff === 0}
-                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 text-sm disabled:opacity-25 hover:border-white/30 transition"
-                  >‹</button>
-                  <button
-                    onClick={() => setWeekOff(w => w + 1)}
-                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 text-sm hover:border-white/30 transition"
-                  >›</button>
+                  <button onClick={() => setWeekOff(w => Math.max(0, w - 1))} disabled={weekOff === 0}
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 text-sm disabled:opacity-25 hover:border-white/30 transition">‹</button>
+                  <button onClick={() => setWeekOff(w => w + 1)}
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 text-sm hover:border-white/30 transition">›</button>
                 </div>
               </div>
 
@@ -198,24 +177,20 @@ export function BookingWidget() {
                 </p>
               )}
 
-              {/* Week row */}
-              <div className="mb-6 grid grid-cols-7 gap-1">
+              <div className="mb-8 grid grid-cols-7 gap-1">
                 {week.map((d, i) => {
-                  const past   = d < today;
-                  const isSun  = d.getDay() === 0;
-                  const sel    = booking.date?.toDateString() === d.toDateString();
+                  const past  = d < today;
+                  const isSun = d.getDay() === 0;
+                  const sel   = booking.date?.toDateString() === d.toDateString();
                   return (
-                    <button
-                      key={i}
-                      disabled={past || isSun}
-                      onClick={() => set("date", d) && set("time", null) || set("date", d)}
+                    <button key={i} disabled={past || isSun}
+                      onClick={() => setBooking(prev => ({ ...prev, date: d, time: null }))}
                       className={cn(
                         "flex flex-col items-center rounded-xl py-3 text-xs transition",
-                        sel    ? "bg-[#fcbb04] text-black font-semibold" :
-                        (past || isSun) ? "opacity-20 cursor-not-allowed" :
-                                 "border border-white/10 hover:border-white/30"
-                      )}
-                    >
+                        sel                  ? "bg-[#fcbb04] text-black font-semibold" :
+                        (past || isSun)      ? "opacity-20 cursor-not-allowed" :
+                                               "border border-white/10 hover:border-white/30"
+                      )}>
                       <span className="font-mono-tag text-[10px]">{DAY[d.getDay()]}</span>
                       <span className="mt-1 text-sm font-bold">{d.getDate()}</span>
                     </button>
@@ -223,24 +198,22 @@ export function BookingWidget() {
                 })}
               </div>
 
-              {/* Time slots */}
+              {/* Time — revealed after date */}
               {booking.date && (
-                <div className="space-y-5">
+                <div className="mb-8 space-y-5">
+                  <p className="font-mono-tag text-xs text-muted-foreground">↳ Select a time</p>
                   {slotsFor(booking.date).map(({ label, times }) => (
                     <div key={label}>
-                      <p className="mb-2 font-mono-tag text-xs text-muted-foreground">{label}</p>
+                      <p className="mb-2 font-mono-tag text-[10px] text-muted-foreground">{label}</p>
                       <div className="flex flex-wrap gap-2">
                         {times.map(t => (
-                          <button
-                            key={t}
-                            onClick={() => set("time", t)}
+                          <button key={t} onClick={() => set("time", t)}
                             className={cn(
                               "rounded-lg border px-3 py-2 text-sm transition",
                               booking.time === t
                                 ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
                                 : "border-white/10 hover:border-white/30"
-                            )}
-                          >{t}</button>
+                            )}>{t}</button>
                         ))}
                       </div>
                     </div>
@@ -248,47 +221,57 @@ export function BookingWidget() {
                 </div>
               )}
 
-              <button
-                disabled={!step1ok}
-                onClick={() => setStep(2)}
-                className="mt-8 w-full rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed"
-              >
+              {/* Services — revealed after time */}
+              {booking.time && (
+                <div className="mb-8">
+                  <p className="mb-3 font-mono-tag text-xs text-muted-foreground">↳ Select services</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {SERVICES.map(s => (
+                      <button key={s} onClick={() => toggleService(s)}
+                        className={cn(
+                          "rounded-xl border px-4 py-3 text-left text-sm transition",
+                          booking.services.includes(s)
+                            ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
+                            : "border-white/10 hover:border-white/25"
+                        )}>
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <button disabled={!step1ok} onClick={() => setStep(2)}
+                className="w-full rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
                 Continue →
               </button>
             </>
           )}
 
-          {/* ─ STEP 2 ─────────────────────────────────────────────────────── */}
+          {/* ─ STEP 2 ───────────────────────────────────────────────────── */}
           {step === 2 && (
             <>
               <p className="mb-6 font-mono-tag text-xs text-muted-foreground">↳ Vehicle details</p>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <Field label="Make">
-                    <input value={booking.make} onChange={e => set("make", e.target.value)}
-                      placeholder="e.g. Toyota" className={inputCls} />
+                    <input value={booking.make} onChange={e => set("make", e.target.value)} placeholder="e.g. Toyota" className={inputCls} />
                   </Field>
                   <Field label="Model">
-                    <input value={booking.model} onChange={e => set("model", e.target.value)}
-                      placeholder="e.g. Corolla" className={inputCls} />
+                    <input value={booking.model} onChange={e => set("model", e.target.value)} placeholder="e.g. Corolla" className={inputCls} />
                   </Field>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <Field label="Year">
-                    <input value={booking.year} onChange={e => set("year", e.target.value.replace(/\D/g, ""))}
-                      placeholder="e.g. 2020" maxLength={4} className={inputCls} />
+                    <input value={booking.year} onChange={e => set("year", e.target.value.replace(/\D/g, ""))} placeholder="e.g. 2020" maxLength={4} className={inputCls} />
                   </Field>
                   <Field label="Odometer (km)">
-                    <input value={booking.odometer} onChange={e => set("odometer", e.target.value.replace(/\D/g, ""))}
-                      placeholder="e.g. 85000" className={inputCls} />
+                    <input value={booking.odometer} onChange={e => set("odometer", e.target.value.replace(/\D/g, ""))} placeholder="e.g. 85000" className={inputCls} />
                   </Field>
                 </div>
               </div>
               <div className="mt-8 flex gap-3">
-                <button onClick={() => setStep(1)}
-                  className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">
-                  ← Back
-                </button>
+                <button onClick={() => setStep(1)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
                 <button disabled={!step2ok} onClick={() => setStep(3)}
                   className="flex-1 rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
                   Continue →
@@ -297,31 +280,25 @@ export function BookingWidget() {
             </>
           )}
 
-          {/* ─ STEP 3 ─────────────────────────────────────────────────────── */}
+          {/* ─ STEP 3 ───────────────────────────────────────────────────── */}
           {step === 3 && (
             <>
               <p className="mb-6 font-mono-tag text-xs text-muted-foreground">↳ Your details</p>
               <div className="space-y-4">
                 <Field label="Full Name">
-                  <input value={booking.name} onChange={e => set("name", e.target.value)}
-                    placeholder="Jane Smith" className={inputCls} />
+                  <input value={booking.name} onChange={e => set("name", e.target.value)} placeholder="Jane Smith" className={inputCls} />
                 </Field>
                 <div className="grid grid-cols-2 gap-4">
                   <Field label="Phone">
-                    <input value={booking.phone} onChange={e => set("phone", e.target.value)}
-                      placeholder="+61 4XX XXX XXX" className={inputCls} />
+                    <input value={booking.phone} onChange={e => set("phone", e.target.value)} placeholder="+61 4XX XXX XXX" className={inputCls} />
                   </Field>
                   <Field label="Email">
-                    <input value={booking.email} onChange={e => set("email", e.target.value)}
-                      placeholder="jane@example.com" className={inputCls} />
+                    <input value={booking.email} onChange={e => set("email", e.target.value)} placeholder="jane@example.com" className={inputCls} />
                   </Field>
                 </div>
               </div>
               <div className="mt-8 flex gap-3">
-                <button onClick={() => setStep(2)}
-                  className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">
-                  ← Back
-                </button>
+                <button onClick={() => setStep(2)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
                 <button disabled={!step3ok} onClick={() => setConfirmed(true)}
                   className="flex-1 rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
                   Confirm Booking ✓
@@ -331,49 +308,67 @@ export function BookingWidget() {
           )}
         </div>
 
-        {/* ── RIGHT PANEL — Summary ───────────────────────────────────────── */}
+        {/* ── RIGHT — Summary ─────────────────────────────────────────────── */}
         <div className="border-t border-white/10 bg-white/[0.02] p-8 md:border-l md:border-t-0 md:p-10">
           <p className="mb-6 font-mono-tag text-xs text-muted-foreground">↳ Your booking</p>
 
-          {booking.services.length === 0 && !booking.date ? (
+          {!booking.date && !booking.time && booking.services.length === 0 && !booking.make ? (
             <p className="text-sm text-muted-foreground">Your selections will appear here as you go.</p>
           ) : (
-            <div className="space-y-6 text-sm">
-              {booking.services.length > 0 && (
-                <div>
-                  <p className="mb-2 font-mono-tag text-[10px] text-muted-foreground uppercase tracking-widest">Services</p>
-                  {booking.services.map(s => (
-                    <p key={s} className="flex items-center gap-2">
-                      <span className="text-[#fcbb04]">✓</span> {s}
-                    </p>
-                  ))}
-                </div>
-              )}
+            <div className="space-y-5 text-sm">
 
               {booking.date && (
-                <div>
-                  <p className="mb-2 font-mono-tag text-[10px] text-muted-foreground uppercase tracking-widest">Date & Time</p>
+                <SummaryRow icon={<Calendar size={15} />}>
+                  <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Date</p>
                   <p>{summaryDate}</p>
-                  {booking.time && <p className="text-muted-foreground">{booking.time}</p>}
-                </div>
+                </SummaryRow>
+              )}
+
+              {booking.time && (
+                <SummaryRow icon={<Clock size={15} />}>
+                  <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Time</p>
+                  <p>{booking.time}</p>
+                </SummaryRow>
+              )}
+
+              {booking.services.length > 0 && (
+                <SummaryRow icon={<Wrench size={15} />}>
+                  <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Services</p>
+                  {booking.services.map(s => <p key={s}>{s}</p>)}
+                </SummaryRow>
               )}
 
               {booking.make && (
-                <div>
-                  <p className="mb-2 font-mono-tag text-[10px] text-muted-foreground uppercase tracking-widest">Vehicle</p>
+                <SummaryRow icon={<Car size={15} />}>
+                  <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Vehicle</p>
                   <p>{[booking.year, booking.make, booking.model].filter(Boolean).join(" ")}</p>
-                  {booking.odometer && <p className="text-muted-foreground">{Number(booking.odometer).toLocaleString()} km</p>}
-                </div>
+                  {booking.odometer && (
+                    <p className="mt-1 flex items-center gap-1.5 text-muted-foreground">
+                      <Gauge size={12} />
+                      {Number(booking.odometer).toLocaleString()} km
+                    </p>
+                  )}
+                </SummaryRow>
               )}
 
               {booking.name && (
-                <div>
-                  <p className="mb-2 font-mono-tag text-[10px] text-muted-foreground uppercase tracking-widest">Contact</p>
+                <SummaryRow icon={<User size={15} />}>
                   <p>{booking.name}</p>
-                  {booking.phone && <p className="text-muted-foreground">{booking.phone}</p>}
-                  {booking.email && <p className="text-muted-foreground">{booking.email}</p>}
-                </div>
+                </SummaryRow>
               )}
+
+              {booking.phone && (
+                <SummaryRow icon={<Phone size={15} />}>
+                  <p>{booking.phone}</p>
+                </SummaryRow>
+              )}
+
+              {booking.email && (
+                <SummaryRow icon={<Mail size={15} />}>
+                  <p>{booking.email}</p>
+                </SummaryRow>
+              )}
+
             </div>
           )}
         </div>
