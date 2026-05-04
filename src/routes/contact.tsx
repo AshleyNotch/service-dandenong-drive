@@ -7,10 +7,10 @@ import heroImg from "@/assets/about-team.jpg";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Maccity Car Workshop" },
-      { name: "description", content: "Call, email or visit our Dandenong South workshop. Open Mon–Sat." },
-      { property: "og:title", content: "Contact Maccity Car Workshop" },
-      { property: "og:description", content: "Workshop in Dandenong South. Call or book online." },
+      { title: "Contact Us | Mac City — Dandenong South Car Workshop" },
+      { name: "description", content: "Visit Mac City at 1/7 England Street, Dandenong South. Open Monday to Friday 7:30am–5:30pm and Saturday 8am–1pm. Call +61 426 899 272, email info@maccity.com.au or book your service online." },
+      { property: "og:title", content: "Contact Us | Mac City — Dandenong South Car Workshop" },
+      { property: "og:description", content: "Visit Mac City at 1/7 England Street, Dandenong South. Open Monday to Friday 7:30am–5:30pm and Saturday 8am–1pm. Call +61 426 899 272, email info@maccity.com.au or book your service online." },
     ],
   }),
   component: ContactPage,

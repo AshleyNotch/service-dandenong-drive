@@ -7,10 +7,10 @@ import heroImg from "@/assets/mechanic-hands.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Maccity Car Workshop" },
-      { name: "description", content: "Independent family-run mechanical workshop in Dandenong South, Victoria." },
-      { property: "og:title", content: "About Maccity Car Workshop" },
-      { property: "og:description", content: "Independent, family-run, licensed roadworthy testers in Dandenong South." },
+      { title: "About Us | Mac City — Dandenong South Car Workshop" },
+      { name: "description", content: "Meet the team behind Mac City — a family-run workshop in Dandenong South serving Melbourne's south-east since 2008. Licensed VicRoads vehicle testers with dealer-grade equipment and a commitment to honest, transparent service." },
+      { property: "og:title", content: "About Us | Mac City — Dandenong South Car Workshop" },
+      { property: "og:description", content: "Meet the team behind Mac City — a family-run workshop in Dandenong South serving Melbourne's south-east since 2008. Licensed VicRoads vehicle testers with dealer-grade equipment and a commitment to honest, transparent service." },
     ],
   }),
   component: AboutPage,

@@ -10,10 +10,10 @@ import diagnosticsImg from "@/assets/service-diagnostics.jpg";
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Services — Maccity Car Workshop" },
-      { name: "description", content: "Roadworthy inspections, mechanical repairs, log book servicing and vehicle diagnostics in Dandenong South." },
-      { property: "og:title", content: "Services — Maccity Car Workshop" },
-      { property: "og:description", content: "Everything we do at our Dandenong South workshop." },
+      { title: "Our Services | Mac City — Dandenong South Car Workshop" },
+      { name: "description", content: "From roadworthy inspections and log book servicing to mechanical repairs and vehicle diagnostics — Mac City handles it all under one roof in Dandenong South. All makes and models welcome. Transparent pricing, same-day results." },
+      { property: "og:title", content: "Our Services | Mac City — Dandenong South Car Workshop" },
+      { property: "og:description", content: "From roadworthy inspections and log book servicing to mechanical repairs and vehicle diagnostics — Mac City handles it all under one roof in Dandenong South. All makes and models welcome. Transparent pricing, same-day results." },
     ],
   }),
   component: ServicesPage,
