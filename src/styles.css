@@ -31,7 +31,7 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-foreground: var(--surface-foreground);
-  --font-display: "Inter", system-ui, sans-serif;
+  --font-display: "Instrument Serif", "Times New Roman", serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --shadow-elegant: 0 30px 60px -20px color-mix(in oklab, var(--primary) 25%, transparent);
 }
@@ -39,58 +39,58 @@
 :root {
   --radius: 0.5rem;
 
-  /* Light "service bay" palette: warm off-white + near-black + ember accent */
-  --background: oklch(0.985 0.005 80);
-  --foreground: oklch(0.16 0.01 60);
+  /* Technoprofil-inspired warm cream + near-black */
+  --background: oklch(0.965 0.012 85);
+  --foreground: oklch(0.16 0.005 60);
 
-  --surface: oklch(0.16 0.01 60);          /* dark hero blocks */
-  --surface-foreground: oklch(0.97 0.005 80);
+  --surface: oklch(0.16 0.005 60);
+  --surface-foreground: oklch(0.965 0.012 85);
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.16 0.01 60);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.16 0.01 60);
+  --card: oklch(0.985 0.008 85);
+  --card-foreground: oklch(0.16 0.005 60);
+  --popover: oklch(0.985 0.008 85);
+  --popover-foreground: oklch(0.16 0.005 60);
 
-  --primary: oklch(0.16 0.01 60);          /* near-black */
-  --primary-foreground: oklch(0.985 0.005 80);
+  --primary: oklch(0.16 0.005 60);
+  --primary-foreground: oklch(0.965 0.012 85);
 
-  --secondary: oklch(0.95 0.01 80);
-  --secondary-foreground: oklch(0.16 0.01 60);
+  --secondary: oklch(0.93 0.012 85);
+  --secondary-foreground: oklch(0.16 0.005 60);
 
-  --muted: oklch(0.95 0.01 80);
-  --muted-foreground: oklch(0.45 0.02 70);
+  --muted: oklch(0.93 0.012 85);
+  --muted-foreground: oklch(0.42 0.01 70);
 
-  --accent: oklch(0.72 0.18 55);           /* ember orange */
-  --accent-foreground: oklch(0.16 0.01 60);
+  --accent: oklch(0.16 0.005 60);
+  --accent-foreground: oklch(0.965 0.012 85);
 
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
 
-  --border: oklch(0.9 0.01 80);
-  --input: oklch(0.9 0.01 80);
-  --ring: oklch(0.72 0.18 55);
+  --border: oklch(0.86 0.012 80);
+  --input: oklch(0.86 0.012 80);
+  --ring: oklch(0.16 0.005 60);
 }
 
 .dark {
-  --background: oklch(0.14 0.01 60);
-  --foreground: oklch(0.97 0.005 80);
-  --surface: oklch(0.1 0.01 60);
-  --surface-foreground: oklch(0.97 0.005 80);
-  --card: oklch(0.18 0.01 60);
-  --card-foreground: oklch(0.97 0.005 80);
-  --popover: oklch(0.18 0.01 60);
-  --popover-foreground: oklch(0.97 0.005 80);
-  --primary: oklch(0.97 0.005 80);
-  --primary-foreground: oklch(0.14 0.01 60);
-  --secondary: oklch(0.22 0.01 60);
-  --secondary-foreground: oklch(0.97 0.005 80);
-  --muted: oklch(0.22 0.01 60);
-  --muted-foreground: oklch(0.7 0.02 70);
-  --accent: oklch(0.72 0.18 55);
-  --accent-foreground: oklch(0.14 0.01 60);
-  --border: oklch(1 0 0 / 10%);
+  --background: oklch(0.14 0.005 60);
+  --foreground: oklch(0.965 0.012 85);
+  --surface: oklch(0.1 0.005 60);
+  --surface-foreground: oklch(0.965 0.012 85);
+  --card: oklch(0.18 0.005 60);
+  --card-foreground: oklch(0.965 0.012 85);
+  --popover: oklch(0.18 0.005 60);
+  --popover-foreground: oklch(0.965 0.012 85);
+  --primary: oklch(0.965 0.012 85);
+  --primary-foreground: oklch(0.14 0.005 60);
+  --secondary: oklch(0.22 0.005 60);
+  --secondary-foreground: oklch(0.965 0.012 85);
+  --muted: oklch(0.22 0.005 60);
+  --muted-foreground: oklch(0.7 0.01 70);
+  --accent: oklch(0.965 0.012 85);
+  --accent-foreground: oklch(0.14 0.005 60);
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.72 0.18 55);
+  --ring: oklch(0.965 0.012 85);
 }
 
 @layer base {
@@ -107,10 +107,17 @@
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "ss01", "cv11";
   }
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .font-mono-tag {
+    font-family: var(--font-sans);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 }
 
