@@ -24,7 +24,7 @@ function AboutPage() {
         <p className="font-mono-tag text-muted-foreground">↳ About us</p>
         <h1 className="mt-6 max-w-6xl font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
           A workshop built<br />
-          <span className="italic opacity-70">on trust, not turnover.</span>
+          <span className="italic text-[#fcbb04]">on trust, not turnover.</span>
         </h1>
       </section>
 

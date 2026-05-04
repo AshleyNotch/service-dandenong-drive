@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="container-page py-24">
         <h2 className="font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
           Maccity<br />
-          <span className="italic opacity-70">Car Workshop</span>
+          <span className="italic text-[#fcbb04]">Car Workshop</span>
         </h2>
 
         <div className="mt-20 grid gap-12 md:grid-cols-12">

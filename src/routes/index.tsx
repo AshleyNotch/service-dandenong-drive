@@ -46,7 +46,7 @@ function Home() {
         <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
           <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
             Honest<br />
-            <span className="italic">Car Care</span>
+            <span className="italic text-[#fcbb04]">Car Care</span>
           </h1>
 
           <div className="mt-12 max-w-md border-l border-white/40 pl-5 text-sm opacity-90">
@@ -64,7 +64,7 @@ function Home() {
           <div>
             <h2 className="font-display text-4xl leading-[1.05] md:text-5xl lg:text-6xl">
               Our mission is to keep Melbourne's south-east moving — with{" "}
-              <span className="italic opacity-70">dealer-grade workmanship</span>,{" "}
+              <span className="italic text-[#fcbb04]">dealer-grade workmanship</span>,{" "}
               modern diagnostics and prices that respect your budget.
             </h2>
             <div className="mt-12">
@@ -110,7 +110,7 @@ function Home() {
           <div className="md:col-span-7">
             <h2 className="font-display text-5xl leading-[0.95] md:text-7xl lg:text-8xl">
               Trusted Local<br />
-              <span className="italic opacity-70">Mechanics Since 2008</span>
+              <span className="italic text-[#fcbb04]">Mechanics Since 2008</span>
             </h2>
             <p className="mt-8 max-w-lg text-base text-muted-foreground">
               Two-bay workshop, dealer-level scan tools and licensed VicRoads

@@ -30,7 +30,7 @@ function ContactPage() {
         <p className="font-mono-tag text-muted-foreground">↳ Contact</p>
         <h1 className="mt-6 max-w-5xl font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
           Drop in, call,<br />
-          <span className="italic opacity-70">or book online.</span>
+          <span className="italic text-[#fcbb04]">or book online.</span>
         </h1>
       </section>
 

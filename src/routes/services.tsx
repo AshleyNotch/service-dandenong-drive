@@ -58,7 +58,7 @@ function ServicesPage() {
         <p className="font-mono-tag text-muted-foreground">↳ Services</p>
         <h1 className="mt-6 max-w-5xl font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
           What we do<br />
-          <span className="italic opacity-70">under one roof</span>
+          <span className="italic text-[#fcbb04]">under one roof</span>
         </h1>
       </section>
 
