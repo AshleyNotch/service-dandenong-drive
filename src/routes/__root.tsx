@@ -1,6 +1,4 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-
-import appCss from "../styles.css?url";
+import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 
 function NotFoundComponent() {
   return (
@@ -25,47 +23,9 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Maccity Car Workshop — Dandenong South" },
-      { name: "description", content: "Maccity Car Workshop in Dandenong South: roadworthy inspections, mechanical repairs, log book servicing and vehicle diagnostics." },
-      { name: "author", content: "Maccity Car Workshop" },
-      { property: "og:title", content: "Maccity Car Workshop — Dandenong South" },
-      { property: "og:description", content: "Maccity Car Workshop in Dandenong South: roadworthy inspections, mechanical repairs, log book servicing and vehicle diagnostics." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Maccity Car Workshop — Dandenong South" },
-      { name: "twitter:description", content: "Maccity Car Workshop in Dandenong South: roadworthy inspections, mechanical repairs, log book servicing and vehicle diagnostics." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/16b2dfa9-0cba-4b64-a59f-901314f4fc1a/id-preview-a9a88045--f670ea75-3a00-4c69-a7bb-3310a8cd3e4c.lovable.app-1777921420873.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/16b2dfa9-0cba-4b64-a59f-901314f4fc1a/id-preview-a9a88045--f670ea75-3a00-4c69-a7bb-3310a8cd3e4c.lovable.app-1777921420873.png" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" },
-    ],
-  }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
 });
-
-function RootShell({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   return <Outlet />;
