@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { BookingWidget } from "@/components/booking-widget";
 import heroImg from "@/assets/hero-workshop.jpg";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
@@ -122,21 +123,14 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-background pb-32 pt-12">
+      {/* BOOKING */}
+      <section className="bg-background py-24">
         <div className="container-page">
-          <div className="rounded-2xl bg-surface p-10 text-surface-foreground md:p-20">
-            <p className="font-mono-tag opacity-60">↳ Ready when you are</p>
-            <h2 className="mt-6 max-w-3xl font-display text-4xl leading-[1.02] md:text-7xl">
-              Pick a slot in 60 seconds.
-            </h2>
-            <Link
-              to="/book"
-              className="mt-10 inline-flex items-center gap-3 rounded-full bg-surface-foreground px-7 py-3.5 text-sm text-surface hover:opacity-90"
-            >
-              Book a service ↳
-            </Link>
-          </div>
+          <p className="font-mono-tag text-muted-foreground">↳ Ready when you are</p>
+          <h2 className="mt-4 mb-10 font-display text-4xl leading-[1.02] md:text-6xl">
+            Book a service — <span className="italic text-[#fcbb04]">in 60 seconds.</span>
+          </h2>
+          <BookingWidget />
         </div>
       </section>
 
