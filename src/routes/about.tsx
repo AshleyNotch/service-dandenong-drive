@@ -44,7 +44,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="container-page grid gap-12 pb-32 md:grid-cols-12 md:items-start">
+      <section className="container-page grid gap-12 py-24 md:grid-cols-12 md:items-start">
         <div className="md:col-span-6">
           <img
             src={teamImg}
@@ -78,18 +78,21 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-surface py-28 text-surface-foreground">
+      <section className="bg-background py-24">
         <div className="container-page">
-          <p className="font-mono-tag opacity-60">↳ Maccity in numbers</p>
-          <div className="mt-12 grid gap-12 border-t border-white/15 pt-12 md:grid-cols-3">
+          <p className="mb-10 font-mono-tag text-muted-foreground">↳ Maccity in numbers</p>
+          <div className="grid gap-4 md:grid-cols-3">
             {[
-              { n: "15+", l: "Years in Dandenong South" },
-              { n: "12,000+", l: "Cars serviced" },
-              { n: "4.9★", l: "Average customer rating" },
+              { n: "15+",     l: "Years serving Dandenong South", desc: "Family-run since 2008 — same faces, same standards." },
+              { n: "12,000+", l: "Cars serviced",                  desc: "Every make and model, from daily drivers to European exotics." },
+              { n: "4.9★",    l: "Average customer rating",        desc: "Rated across Google and Facebook by our local community." },
             ].map((s) => (
-              <div key={s.l}>
-                <div className="font-display text-7xl leading-none md:text-9xl">{s.n}</div>
-                <div className="mt-4 font-mono-tag opacity-60">{s.l}</div>
+              <div key={s.l} className="flex flex-col justify-between rounded-2xl border border-white/10 p-8 md:p-10">
+                <div className="font-display text-6xl leading-none text-[#fcbb04] md:text-7xl">{s.n}</div>
+                <div className="mt-8">
+                  <div className="text-base font-medium">{s.l}</div>
+                  <div className="mt-2 text-sm text-muted-foreground">{s.desc}</div>
+                </div>
               </div>
             ))}
           </div>
