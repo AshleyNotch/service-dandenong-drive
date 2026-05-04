@@ -59,20 +59,36 @@ function Home() {
 
       {/* MISSION */}
       <section className="bg-surface py-32 text-surface-foreground">
-        <div className="container-page">
-          <h2 className="max-w-5xl font-display text-4xl leading-[1.05] md:text-6xl lg:text-7xl">
-            Our mission is to keep Melbourne's south-east moving — with{" "}
-            <span className="italic opacity-70">dealer-grade workmanship</span>,{" "}
-            modern diagnostics and prices that respect your budget.
-          </h2>
+        <div className="container-page grid gap-16 md:grid-cols-2 md:items-end">
+          {/* left — mission text */}
+          <div>
+            <h2 className="font-display text-4xl leading-[1.05] md:text-5xl lg:text-6xl">
+              Our mission is to keep Melbourne's south-east moving — with{" "}
+              <span className="italic opacity-70">dealer-grade workmanship</span>,{" "}
+              modern diagnostics and prices that respect your budget.
+            </h2>
+            <div className="mt-12">
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-3 rounded-full bg-surface-foreground px-7 py-3.5 text-sm text-surface hover:opacity-90"
+              >
+                About us ↳
+              </Link>
+            </div>
+          </div>
 
-          <div className="mt-12">
-            <Link
-              to="/about"
-              className="inline-flex items-center gap-3 rounded-full bg-surface-foreground px-7 py-3.5 text-sm text-surface hover:opacity-90"
-            >
-              About us ↳
-            </Link>
+          {/* right — service links */}
+          <div className="divide-y divide-surface-foreground/20 border-t border-surface-foreground/20">
+            {services.map((s) => (
+              <Link
+                key={s.slug}
+                to="/services"
+                className="group flex items-center justify-between py-5 text-base transition-opacity hover:opacity-70"
+              >
+                <span>{s.title}</span>
+                <span className="text-lg transition-transform group-hover:translate-x-1">→</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
