@@ -107,10 +107,17 @@
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "ss01", "cv11";
   }
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    font-weight: 600;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .font-mono-tag {
+    font-family: var(--font-sans);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 500;
   }
 }
 
