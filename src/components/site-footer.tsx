@@ -1,13 +1,11 @@
 import { Link } from "@tanstack/react-router";
+import logo from "@/assets/logo.png";
 
 export function SiteFooter() {
   return (
     <footer className="bg-surface text-surface-foreground">
       <div className="container-page py-24">
-        <h2 className="font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
-          Maccity<br />
-          <span className="italic text-[#fcbb04]">Car Workshop</span>
-        </h2>
+        <img src={logo} alt="Maccity" className="w-auto" style={{ height: "58px" }} />
 
         <div className="mt-20 grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
@@ -43,9 +41,14 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-page flex flex-col items-start justify-between gap-3 py-6 font-mono-tag opacity-60 md:flex-row md:items-center">
-          <span>© {new Date().getFullYear()} Maccity Car Workshop · Licensed Vehicle Tester (VIC)</span>
-          <span>Dandenong South · Victoria · Australia</span>
+        <div className="container-page py-6">
+          <h2 className="font-display text-5xl leading-none md:text-7xl lg:text-8xl">
+            Maccity <span className="italic text-[#fcbb04]">Car Workshop</span>
+          </h2>
+          <div className="mt-6 flex flex-col items-start justify-between gap-3 font-mono-tag opacity-60 md:flex-row md:items-center">
+            <span>© {new Date().getFullYear()} Maccity Car Workshop · Licensed Vehicle Tester (VIC)</span>
+            <span>Dandenong South · Victoria · Australia</span>
+          </div>
         </div>
       </div>
     </footer>
