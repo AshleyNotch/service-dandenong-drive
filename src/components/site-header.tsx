@@ -38,7 +38,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
           <Link
             to="/"
           >
-            <img src={logo} alt="Maccity" className="h-12 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
+            <img src={logo} alt="Maccity" className="h-10 w-auto mx-2.5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
           </Link>
 
           <button
