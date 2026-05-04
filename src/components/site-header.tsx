@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 
@@ -13,16 +13,25 @@ const nav = [
 
 export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }) {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const onDark = variant === "dark";
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-40",
-          onDark
-            ? "bg-gradient-to-b from-black/50 to-transparent text-surface-foreground"
-            : "bg-background/90 backdrop-blur-sm text-foreground"
+          "fixed inset-x-0 top-0 z-40 transition-all duration-300",
+          scrolled
+            ? "bg-black/40 backdrop-blur-md text-surface-foreground"
+            : onDark
+              ? "bg-gradient-to-b from-black/50 to-transparent text-surface-foreground"
+              : "bg-background/90 backdrop-blur-sm text-foreground"
         )}
       >
         <div className="container-page flex items-center justify-between py-7">
