@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import heroImg from "@/assets/about-team.jpg";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -24,14 +25,28 @@ const blocks = [
 function ContactPage() {
   return (
     <div className="bg-background">
-      <SiteHeader />
+      <SiteHeader variant="dark" />
 
-      <section className="container-page pb-16 pt-40">
-        <p className="font-mono-tag text-muted-foreground">↳ Contact</p>
-        <h1 className="mt-6 max-w-5xl font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
-          Drop in, call,<br />
-          <span className="italic text-[#fcbb04]">or book online.</span>
-        </h1>
+      <section className="relative min-h-[100svh] overflow-hidden bg-surface text-surface-foreground">
+        <img
+          src={heroImg}
+          alt="The Maccity team"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
+        <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
+          <p className="font-mono-tag mb-6 text-white/60">↳ Contact</p>
+          <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
+            Drop in, call,<br />
+            <span className="italic text-[#fcbb04]">or book online.</span>
+          </h1>
+          <div className="mt-12 max-w-md border-l border-white/40 pl-5 text-sm opacity-90">
+            <span className="mr-2 inline-block">↳</span>
+            1/7 England Street, Dandenong South · Mon–Fri 7:30–17:30 · Sat 8:00–13:00
+          </div>
+        </div>
       </section>
 
       <section className="container-page pb-32">

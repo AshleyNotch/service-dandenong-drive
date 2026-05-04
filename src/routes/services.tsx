@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import heroImg from "@/assets/workshop-exterior.jpg";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
 import logbookImg from "@/assets/service-logbook.jpg";
@@ -52,14 +53,28 @@ const items = [
 function ServicesPage() {
   return (
     <div className="bg-background">
-      <SiteHeader />
+      <SiteHeader variant="dark" />
 
-      <section className="container-page pb-20 pt-40">
-        <p className="font-mono-tag text-muted-foreground">↳ Services</p>
-        <h1 className="mt-6 max-w-5xl font-display text-5xl leading-[0.95] md:text-8xl lg:text-[10rem]">
-          What we do<br />
-          <span className="italic text-[#fcbb04]">under one roof</span>
-        </h1>
+      <section className="relative min-h-[100svh] overflow-hidden bg-surface text-surface-foreground">
+        <img
+          src={heroImg}
+          alt="Maccity Car Workshop exterior"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
+        <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
+          <p className="font-mono-tag mb-6 text-white/60">↳ Services</p>
+          <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
+            What we do<br />
+            <span className="italic text-[#fcbb04]">under one roof</span>
+          </h1>
+          <div className="mt-12 max-w-md border-l border-white/40 pl-5 text-sm opacity-90">
+            <span className="mr-2 inline-block">↳</span>
+            Roadworthy inspections, mechanical repairs, log book servicing and vehicle diagnostics — all in Dandenong South.
+          </div>
+        </div>
       </section>
 
       <section className="container-page pb-32">
