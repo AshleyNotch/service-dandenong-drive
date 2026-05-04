@@ -19,15 +19,17 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
     <>
       <header
         className={cn(
-          "absolute inset-x-0 top-0 z-40",
-          onDark ? "text-surface-foreground" : "text-foreground"
+          "fixed inset-x-0 top-0 z-40",
+          onDark
+            ? "bg-gradient-to-b from-black/50 to-transparent text-surface-foreground"
+            : "bg-background/90 backdrop-blur-sm text-foreground"
         )}
       >
         <div className="container-page flex items-center justify-between py-7">
           <Link
             to="/"
           >
-            <img src={logo} alt="Maccity" className="h-20 w-auto" />
+            <img src={logo} alt="Maccity" className="h-20 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
           </Link>
 
           <button
