@@ -27,7 +27,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
           <Link
             to="/"
           >
-            <img src={logo} alt="Maccity" className="h-14 w-auto" />
+            <img src={logo} alt="Maccity" className="h-20 w-auto" />
           </Link>
 
           <button
@@ -61,7 +61,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
             to="/"
             onClick={() => setOpen(false)}
           >
-            <img src={logo} alt="Maccity" className="h-14 w-auto" />
+            <img src={logo} alt="Maccity" className="h-20 w-auto" />
           </Link>
           <button
             onClick={() => setOpen(false)}
