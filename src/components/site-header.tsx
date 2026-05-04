@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 
 const nav = [
-  { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
-  { to: "/about", label: "About us" },
-  { to: "/contact", label: "Contact" },
-  { to: "/book", label: "Book a service" },
+  { href: "/",         label: "Home" },
+  { href: "/services", label: "Services" },
+  { href: "/about",    label: "About us" },
+  { href: "/contact",  label: "Contact" },
+  { href: "/#book",    label: "Book a service" },
 ] as const;
 
 export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }) {
@@ -86,9 +86,9 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
         <div className="container-page mt-16 grid gap-12 md:grid-cols-12">
           <nav className="flex flex-col gap-2 md:col-span-8">
             {nav.map((n, i) => (
-              <Link
-                key={n.to}
-                to={n.to}
+              <a
+                key={n.href}
+                href={n.href}
                 onClick={() => setOpen(false)}
                 className="group flex items-baseline gap-6 border-b border-background/15 py-5 transition hover:opacity-80"
               >
@@ -98,7 +98,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
                 <span className="font-display text-5xl leading-none md:text-7xl">
                   {n.label}
                 </span>
-              </Link>
+              </a>
             ))}
           </nav>
 

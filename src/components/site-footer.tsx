@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
 
 export function SiteFooter() {
@@ -30,12 +29,12 @@ export function SiteFooter() {
               +61 426 899 272<br />
               info@maccity.com.au
             </p>
-            <Link
-              to="/book"
+            <a
+              href="/#book"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-surface-foreground px-5 py-2.5 text-sm text-surface hover:opacity-90"
             >
               Book a service ↳
-            </Link>
+            </a>
           </div>
         </div>
       </div>

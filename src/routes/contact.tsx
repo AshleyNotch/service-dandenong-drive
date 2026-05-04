@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
@@ -49,12 +49,12 @@ function ContactPage() {
         </div>
 
         <div className="mt-16 flex justify-center">
-          <Link
-            to="/book"
+          <a
+            href="/#book"
             className="inline-flex items-center gap-3 rounded-full bg-foreground px-8 py-4 text-sm text-background hover:opacity-90"
           >
             Book a service ↳
-          </Link>
+          </a>
         </div>
       </section>
 

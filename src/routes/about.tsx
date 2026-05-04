@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import teamImg from "@/assets/about-team.jpg";
@@ -82,12 +82,12 @@ function AboutPage() {
 
       <section className="bg-background py-24">
         <div className="container-page">
-          <Link
-            to="/book"
+          <a
+            href="/#book"
             className="inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-3.5 text-sm text-background hover:opacity-90"
           >
             Book a service ↳
-          </Link>
+          </a>
         </div>
       </section>
 

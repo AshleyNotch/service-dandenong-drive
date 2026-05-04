@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
@@ -95,12 +95,12 @@ function ServicesPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/book"
+                <a
+                  href="/#book"
                   className="mt-8 inline-flex items-center gap-3 rounded-full bg-foreground px-6 py-3 text-sm text-background hover:opacity-90"
                 >
                   Book this service ↳
-                </Link>
+                </a>
               </div>
             </article>
           ))}

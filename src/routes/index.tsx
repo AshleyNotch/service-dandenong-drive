@@ -124,7 +124,7 @@ function Home() {
       </section>
 
       {/* BOOKING */}
-      <section className="bg-background py-24">
+      <section id="book" className="bg-background py-24">
         <div className="container-page">
           <p className="font-mono-tag text-muted-foreground">↳ Ready when you are</p>
           <h2 className="mt-4 mb-10 font-display text-4xl leading-[1.02] md:text-6xl">
