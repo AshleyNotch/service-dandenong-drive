@@ -15,9 +15,9 @@ export const Route = createFileRoute("/contact")({
 });
 
 const blocks = [
-  { label: "Workshop", value: ["12 Greens Road", "Dandenong South VIC 3175"] },
-  { label: "Phone", value: ["(03) 9000 1234"] },
-  { label: "Email", value: ["hello@maccity.com.au"] },
+  { label: "Workshop", value: ["1/7 England Street", "Dandenong South, VIC 3175"] },
+  { label: "Phone", value: ["+61 426 899 272"] },
+  { label: "Email", value: ["info@maccity.com.au"] },
   { label: "Hours", value: ["Mon–Fri · 7:30 – 17:30", "Sat · 8:00 – 13:00"] },
 ];
 

@@ -105,7 +105,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
           <div className="md:col-span-4">
             <p className="font-mono-tag opacity-50">↳ Workshop</p>
             <p className="mt-4 text-sm leading-relaxed opacity-90">
-              12 Greens Road<br />
+              1/7 England Street<br />
               Dandenong South, VIC 3175<br />
               Australia
             </p>
@@ -116,8 +116,8 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
             </p>
             <p className="mt-8 font-mono-tag opacity-50">↳ Contact</p>
             <p className="mt-4 text-sm leading-relaxed opacity-90">
-              (03) 9000 1234<br />
-              hello@maccity.com.au
+              +61 426 899 272<br />
+              info@maccity.com.au
             </p>
           </div>
         </div>
