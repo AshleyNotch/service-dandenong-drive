@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
@@ -15,6 +15,8 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const onDark = variant === "dark";
+  const { pathname } = useLocation();
+  const isActive = (href: string) => href !== "/#book" && (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -72,7 +74,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
             to="/"
             onClick={() => setOpen(false)}
           >
-            <img src={logo} alt="Maccity" className="h-20 w-auto" />
+            <img src={logo} alt="Maccity" className="h-[50px] w-auto" />
           </Link>
           <button
             onClick={() => setOpen(false)}
@@ -90,12 +92,15 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
                 key={n.href}
                 href={n.href}
                 onClick={() => setOpen(false)}
-                className="group flex items-baseline gap-6 border-b border-background/15 py-5 transition hover:opacity-80"
+                className="group flex items-baseline gap-6 border-b border-background/15 py-5 transition"
               >
                 <span className="font-mono-tag opacity-50">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="font-display text-5xl leading-none md:text-7xl">
+                <span className={cn(
+                  "font-display text-5xl leading-none md:text-7xl transition-colors",
+                  isActive(n.href) ? "italic text-[#fcbb04]" : "group-hover:text-[#fcbb04]"
+                )}>
                   {n.label}
                 </span>
               </a>
