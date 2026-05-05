@@ -35,8 +35,12 @@ export type Database = {
           name: string;
           phone: string;
           email: string;
-          status: "pending" | "confirmed" | "cancelled";
+          status: "pending" | "confirmed" | "cancelled" | "completed";
           notes: string | null;
+          admin_notes: string | null;
+          completed_at: string | null;
+          cost: number | null;
+          completion_notes: string | null;
           created_at: string;
         };
         Insert: {
@@ -51,13 +55,21 @@ export type Database = {
           name: string;
           phone: string;
           email: string;
-          status?: "pending" | "confirmed" | "cancelled";
+          status?: "pending" | "confirmed" | "cancelled" | "completed";
           notes?: string | null;
+          admin_notes?: string | null;
+          completed_at?: string | null;
+          cost?: number | null;
+          completion_notes?: string | null;
           created_at?: string;
         };
         Update: {
-          status?: "pending" | "confirmed" | "cancelled";
+          status?: "pending" | "confirmed" | "cancelled" | "completed";
           notes?: string | null;
+          admin_notes?: string | null;
+          completed_at?: string | null;
+          cost?: number | null;
+          completion_notes?: string | null;
         };
         Relationships: [];
       };
@@ -73,6 +85,7 @@ export type Database = {
           phone: string;
           email: string;
           notes: string | null;
+          admin_notes: string | null;
           status: "pending" | "sent" | "completed";
           created_at: string;
         };
@@ -87,11 +100,34 @@ export type Database = {
           phone: string;
           email: string;
           notes?: string | null;
+          admin_notes?: string | null;
           status?: "pending" | "sent" | "completed";
           created_at?: string;
         };
         Update: {
           status?: "pending" | "sent" | "completed";
+          admin_notes?: string | null;
+        };
+        Relationships: [];
+      };
+      contacts: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          phone: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          phone?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          name?: string;
+          phone?: string | null;
         };
         Relationships: [];
       };
@@ -143,7 +179,8 @@ export type Database = {
 
 // Convenience row types
 export type Role         = Database["public"]["Enums"]["user_role"];
-export type BookingStatus = Database["public"]["Enums"]["booking_status"];
+export type BookingStatus = "pending" | "confirmed" | "cancelled" | "completed";
+export type Contact      = Database["public"]["Tables"]["contacts"]["Row"];
 export type QuoteStatus  = Database["public"]["Enums"]["quote_status"];
 export type Profile      = Database["public"]["Tables"]["profiles"]["Row"];
 export type Booking      = Database["public"]["Tables"]["bookings"]["Row"];
