@@ -33,13 +33,30 @@ const empty: QuoteForm = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const inputCls = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
+const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+const isValidPhone = (v: string) => v.replace(/\D/g, "").length >= 8;
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+  const ccLen = digits[0] === "1" ? 1 : 2;
+  if (digits.length <= ccLen) return `(+${digits}`;
+  const cc = digits.slice(0, ccLen);
+  const local = digits.slice(ccLen);
+  const groups: string[] = [];
+  for (let i = 0; i < local.length; i += 3) groups.push(local.slice(i, i + 3));
+  return `(+${cc}) ${groups.join(" ")}`;
+}
+
+const inputCls      = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
+const inputClsError = "w-full rounded-xl border border-red-500/60 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
+
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
       <label className="mb-1.5 block font-mono-tag text-xs text-muted-foreground">{label}</label>
       {children}
+      {error && <p className="mt-1.5 font-mono-tag text-xs text-red-400">{error}</p>}
     </div>
   );
 }
@@ -63,20 +80,26 @@ interface QuoteModalProps {
 export function QuoteModal({ open, onClose }: QuoteModalProps) {
   const [form, setForm]           = useState<QuoteForm>(empty);
   const [submitted, setSubmitted] = useState(false);
+  const [touched, setTouched]     = useState({ phone: false, email: false });
   const overlayRef                = useRef<HTMLDivElement>(null);
 
   const set = <K extends keyof QuoteForm>(k: K, v: QuoteForm[K]) =>
     setForm(prev => ({ ...prev, [k]: v }));
+
+  const touch = (k: "phone" | "email") => setTouched(prev => ({ ...prev, [k]: true }));
 
   const toggleService = (s: string) =>
     set("services", form.services.includes(s)
       ? form.services.filter(x => x !== s)
       : [...form.services, s]);
 
+  const phoneErr = touched.phone && form.phone.trim() !== "" && !isValidPhone(form.phone) ? "Enter a valid phone number" : undefined;
+  const emailErr = touched.email && form.email.trim() !== "" && !isValidEmail(form.email) ? "Enter a valid email address" : undefined;
+
   const canSubmit =
     form.services.length > 0 &&
     form.make.trim() && form.model.trim() && form.year.trim() &&
-    form.name.trim() && form.phone.trim() && form.email.trim();
+    form.name.trim() && isValidPhone(form.phone) && isValidEmail(form.email);
 
   // Close on Escape
   useEffect(() => {
@@ -197,11 +220,11 @@ export function QuoteModal({ open, onClose }: QuoteModalProps) {
                 <input value={form.name} onChange={e => set("name", e.target.value)} placeholder="Jane Smith" className={inputCls} />
               </Field>
               <div className="grid grid-cols-2 gap-4">
-                <Field label="Phone">
-                  <input value={form.phone} onChange={e => set("phone", e.target.value)} placeholder="+61 4XX XXX XXX" className={inputCls} />
+                <Field label="Phone" error={phoneErr}>
+                  <input value={form.phone} onChange={e => set("phone", formatPhone(e.target.value))} onBlur={() => touch("phone")} placeholder="(+61) 412 345 678" className={phoneErr ? inputClsError : inputCls} />
                 </Field>
-                <Field label="Email">
-                  <input value={form.email} onChange={e => set("email", e.target.value)} placeholder="jane@example.com" className={inputCls} />
+                <Field label="Email" error={emailErr}>
+                  <input value={form.email} onChange={e => set("email", e.target.value)} onBlur={() => touch("email")} placeholder="jane@example.com" className={emailErr ? inputClsError : inputCls} />
                 </Field>
               </div>
               <Field label="Additional Notes — optional">

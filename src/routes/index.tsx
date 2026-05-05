@@ -125,8 +125,6 @@ function Home() {
         </div>
       </section>
 
-      <GetAQuoteSection />
-
       {/* BOOKING */}
       <section id="book" className="bg-background py-24">
         <div className="container-page">
@@ -137,6 +135,8 @@ function Home() {
           <BookingWidget />
         </div>
       </section>
+
+      <GetAQuoteSection />
 
       <TestimonialsSection reviews={homeReviews} />
       <SiteFooter />

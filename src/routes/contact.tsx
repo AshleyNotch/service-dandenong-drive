@@ -3,6 +3,8 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection, contactReviews } from "@/components/testimonials-section";
+import { BookingWidget } from "@/components/booking-widget";
+import { GetAQuoteSection } from "@/components/quote-modal";
 import heroImg from "@/assets/contact-hero.webp";
 
 export const Route = createFileRoute("/contact")({
@@ -108,6 +110,18 @@ function ContactPage() {
 
         </div>
       </section>
+
+      <section id="book" className="bg-background py-24">
+        <div className="container-page">
+          <p className="font-mono-tag text-muted-foreground">↳ Ready when you are</p>
+          <h2 className="mt-4 mb-10 font-display text-4xl leading-[1.02] md:text-6xl">
+            Book a service — <span className="italic text-[#fcbb04]">in 60 seconds.</span>
+          </h2>
+          <BookingWidget />
+        </div>
+      </section>
+
+      <GetAQuoteSection />
 
       <TestimonialsSection reviews={contactReviews} />
       <SiteFooter />

@@ -57,15 +57,35 @@ function slotsFor(date: Date) {
     : [{ label: "Morning", times: SLOTS_WD_MORNING  }, { label: "Afternoon", times: SLOTS_WD_AFTERNOON  }];
 }
 
+// ─── Validation & formatting ──────────────────────────────────────────────────
+
+const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+const isValidPhone = (v: string) => v.replace(/\D/g, "").length >= 8;
+
+function formatPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+  // NANP (+1) gets a 1-digit country code; everything else gets 2 digits
+  const ccLen = digits[0] === "1" ? 1 : 2;
+  if (digits.length <= ccLen) return `(+${digits}`;
+  const cc = digits.slice(0, ccLen);
+  const local = digits.slice(ccLen);
+  const groups: string[] = [];
+  for (let i = 0; i < local.length; i += 3) groups.push(local.slice(i, i + 3));
+  return `(+${cc}) ${groups.join(" ")}`;
+}
+
 // ─── Small pieces ─────────────────────────────────────────────────────────────
 
 const inputCls = "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
+const inputClsError = "w-full rounded-xl border border-red-500/60 bg-white/5 px-4 py-3 text-sm placeholder:text-muted-foreground focus:border-[#fcbb04] focus:outline-none transition";
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
       <label className="mb-1.5 block font-mono-tag text-xs text-muted-foreground">{label}</label>
       {children}
+      {error && <p className="mt-1.5 font-mono-tag text-xs text-red-400">{error}</p>}
     </div>
   );
 }
@@ -86,6 +106,9 @@ export function BookingWidget() {
   const [weekOff, setWeekOff]     = useState(0);
   const [booking, setBooking]     = useState<Booking>(empty);
   const [confirmed, setConfirmed] = useState(false);
+  const [touched, setTouched]     = useState({ phone: false, email: false });
+
+  const touch = (k: "phone" | "email") => setTouched(prev => ({ ...prev, [k]: true }));
 
   const today  = new Date(); today.setHours(0, 0, 0, 0);
   const monday = weekMonday(weekOff);
@@ -102,7 +125,9 @@ export function BookingWidget() {
   const step1ok = booking.services.length > 0;
   const step2ok = booking.date !== null && booking.time !== null;
   const step3ok = booking.make.trim() !== "" && booking.model.trim() !== "" && booking.year.trim() !== "";
-  const step4ok = booking.name.trim() !== "" && booking.phone.trim() !== "" && booking.email.trim() !== "";
+  const phoneErr = touched.phone && booking.phone.trim() !== "" && !isValidPhone(booking.phone) ? "Enter a valid phone number" : undefined;
+  const emailErr = touched.email && booking.email.trim() !== "" && !isValidEmail(booking.email) ? "Enter a valid email address" : undefined;
+  const step4ok  = booking.name.trim() !== "" && isValidPhone(booking.phone) && isValidEmail(booking.email);
 
   const summaryDate = booking.date?.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" });
 
@@ -299,11 +324,11 @@ export function BookingWidget() {
                   <input value={booking.name} onChange={e => set("name", e.target.value)} placeholder="Jane Smith" className={inputCls} />
                 </Field>
                 <div className="grid grid-cols-2 gap-4">
-                  <Field label="Phone">
-                    <input value={booking.phone} onChange={e => set("phone", e.target.value)} placeholder="+61 4XX XXX XXX" className={inputCls} />
+                  <Field label="Phone" error={phoneErr}>
+                    <input value={booking.phone} onChange={e => set("phone", formatPhone(e.target.value))} onBlur={() => touch("phone")} placeholder="(+61) 412 345 678" className={phoneErr ? inputClsError : inputCls} />
                   </Field>
-                  <Field label="Email">
-                    <input value={booking.email} onChange={e => set("email", e.target.value)} placeholder="jane@example.com" className={inputCls} />
+                  <Field label="Email" error={emailErr}>
+                    <input value={booking.email} onChange={e => set("email", e.target.value)} onBlur={() => touch("email")} placeholder="jane@example.com" className={emailErr ? inputClsError : inputCls} />
                   </Field>
                 </div>
               </div>
