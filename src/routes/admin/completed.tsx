@@ -3,7 +3,8 @@ import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Booking } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
-import { Search, X, Mail, Phone } from "lucide-react";
+import { Search, X, Mail, Phone, Trash2 } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/admin/completed")({
   component: CompletedPage,
@@ -17,6 +18,9 @@ function CompletedPage() {
   const [search, setSearch]         = useState("");
   const [serviceFilter, setService] = useState("all");
   const [selected, setSelected]     = useState<Booking | null>(null);
+  const { profile } = useAuth();
+  const isSuperAdmin = profile?.role === "super_admin";
+  const [deleting, setDeleting]     = useState(false);
 
   useEffect(() => {
     supabase.from("bookings").select("*")
@@ -136,9 +140,26 @@ function CompletedPage() {
               <span className="rounded-full bg-purple-400/15 px-3 py-1 font-mono-tag text-xs uppercase tracking-wide text-purple-400">
                 Completed
               </span>
-              <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground transition">
-                <X size={16} />
-              </button>
+              <div className="flex items-center gap-2">
+                {isSuperAdmin && (
+                  <button
+                    onClick={async () => {
+                      if (!confirm("Permanently delete this record?")) return;
+                      setDeleting(true);
+                      await supabase.from("bookings").delete().eq("id", selected.id);
+                      setBookings(prev => prev.filter(b => b.id !== selected.id));
+                      setSelected(null);
+                      setDeleting(false);
+                    }}
+                    disabled={deleting}
+                    className="flex items-center gap-1.5 rounded-lg border border-red-400/20 bg-red-400/5 px-3 py-1.5 font-mono-tag text-[10px] text-red-400 transition hover:bg-red-400/10 disabled:opacity-30">
+                    <Trash2 size={11} />{deleting ? "…" : "Delete"}
+                  </button>
+                )}
+                <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground transition">
+                  <X size={16} />
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 space-y-6 p-6">

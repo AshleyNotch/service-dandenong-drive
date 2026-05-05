@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Booking, BookingStatus } from "@/lib/database.types";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import { Search, X, Calendar, List, ChevronLeft, ChevronRight, Mail, Phone, CheckCircle2 } from "lucide-react";
+import { Search, X, Calendar, List, ChevronLeft, ChevronRight, Mail, Phone, CheckCircle2, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/bookings")({
   component: BookingsPage,
@@ -47,6 +48,9 @@ function BookingsPage() {
   const [adminNotes, setAdminNotes]     = useState("");
   const [savingNotes, setSavingNotes]   = useState(false);
   const [updating, setUpdating]         = useState(false);
+  const { profile } = useAuth();
+  const isSuperAdmin = profile?.role === "super_admin";
+  const [deleting, setDeleting]         = useState(false);
   const [showDoneForm, setShowDoneForm] = useState(false);
   const [doneData, setDoneData]         = useState({ cost: "", completionNotes: "", completedAt: new Date().toISOString().slice(0, 16) });
   const [markingDone, setMarkingDone]   = useState(false);
@@ -86,6 +90,15 @@ function BookingsPage() {
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
     if (selected?.id === id) setSelected(prev => prev ? { ...prev, status } : null);
     setUpdating(false);
+  }
+
+  async function deleteBooking(id: string) {
+    if (!confirm("Permanently delete this booking?")) return;
+    setDeleting(true);
+    await supabase.from("bookings").delete().eq("id", id);
+    setBookings(prev => prev.filter(b => b.id !== id));
+    if (selected?.id === id) setSelected(null);
+    setDeleting(false);
   }
 
   async function markAsDone() {
@@ -238,9 +251,17 @@ function BookingsPage() {
                   <span className={cn("rounded-full px-3 py-1 font-mono-tag text-xs uppercase tracking-wide", STATUS_COLOURS[selected.status])}>
                     {selected.status}
                   </span>
-                  <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground transition">
-                    <X size={16} />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {isSuperAdmin && (
+                      <button onClick={() => deleteBooking(selected.id)} disabled={deleting}
+                        className="flex items-center gap-1.5 rounded-lg border border-red-400/20 bg-red-400/5 px-3 py-1.5 font-mono-tag text-[10px] text-red-400 transition hover:bg-red-400/10 disabled:opacity-30">
+                        <Trash2 size={11} />{deleting ? "…" : "Delete"}
+                      </button>
+                    )}
+                    <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground transition">
+                      <X size={16} />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex-1 space-y-6 p-6">
