@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Calendar, Clock, Wrench, Car, User, Mail, Phone, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
 import confetti from "canvas-confetti";
+import { supabase } from "@/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -106,6 +107,7 @@ export function BookingWidget() {
   const [weekOff, setWeekOff]     = useState(0);
   const [booking, setBooking]     = useState<Booking>(empty);
   const [confirmed, setConfirmed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [touched, setTouched]     = useState({ phone: false, email: false });
 
   const touch = (k: "phone" | "email") => setTouched(prev => ({ ...prev, [k]: true }));
@@ -334,9 +336,28 @@ export function BookingWidget() {
               </div>
               <div className="mt-8 flex gap-3">
                 <button onClick={() => setStep(3)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
-                <button disabled={!step4ok} onClick={() => { setConfirmed(true); confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ["#fcbb04", "#ffffff", "#000000"] }); }}
+                <button
+                  disabled={!step4ok || submitting}
+                  onClick={async () => {
+                    setSubmitting(true);
+                    await supabase.from("bookings").insert({
+                      date:     booking.date!.toISOString().split("T")[0],
+                      time:     booking.time!,
+                      services: booking.services,
+                      make:     booking.make,
+                      model:    booking.model,
+                      year:     booking.year,
+                      odometer: booking.odometer || null,
+                      name:     booking.name,
+                      phone:    booking.phone,
+                      email:    booking.email,
+                    });
+                    setSubmitting(false);
+                    setConfirmed(true);
+                    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ["#fcbb04", "#ffffff", "#000000"] });
+                  }}
                   className="flex-1 rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
-                  Confirm Booking ✓
+                  {submitting ? "Confirming…" : "Confirm Booking ✓"}
                 </button>
               </div>
             </>

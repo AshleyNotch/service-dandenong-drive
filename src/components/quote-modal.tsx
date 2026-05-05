@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { X, Wrench, Car, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import confetti from "canvas-confetti";
+import { supabase } from "@/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -79,8 +80,9 @@ interface QuoteModalProps {
 
 export function QuoteModal({ open, onClose }: QuoteModalProps) {
   const [form, setForm]           = useState<QuoteForm>(empty);
-  const [submitted, setSubmitted] = useState(false);
-  const [touched, setTouched]     = useState({ phone: false, email: false });
+  const [submitted, setSubmitted]   = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [touched, setTouched]       = useState({ phone: false, email: false });
   const overlayRef                = useRef<HTMLDivElement>(null);
 
   const set = <K extends keyof QuoteForm>(k: K, v: QuoteForm[K]) =>
@@ -241,11 +243,27 @@ export function QuoteModal({ open, onClose }: QuoteModalProps) {
             {/* Submit */}
             <button
               type="button"
-              disabled={!canSubmit}
-              onClick={() => { setSubmitted(true); confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ["#fcbb04", "#ffffff", "#000000"] }); }}
+              disabled={!canSubmit || submitting}
+              onClick={async () => {
+                setSubmitting(true);
+                await supabase.from("quote_requests").insert({
+                  services: form.services,
+                  make:     form.make,
+                  model:    form.model,
+                  year:     form.year,
+                  odometer: form.odometer || null,
+                  name:     form.name,
+                  phone:    form.phone,
+                  email:    form.email,
+                  notes:    form.notes || null,
+                });
+                setSubmitting(false);
+                setSubmitted(true);
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ["#fcbb04", "#ffffff", "#000000"] });
+              }}
               className="w-full rounded-xl bg-[#fcbb04] py-4 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed"
             >
-              Send Quote Request →
+              {submitting ? "Sending…" : "Send Quote Request →"}
             </button>
 
           </div>
