@@ -46,8 +46,9 @@ function Home() {
 
         <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
           <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
-            Honest<br />
-            <span className="italic text-[#fcbb04]">Car Care</span>
+            Your Reliable<br />
+            <span className="italic text-[#fcbb04]">Car Workshop</span><br />
+            in Dandenong South
           </h1>
 
           <div className="mt-12 max-w-md border-l border-white/40 pl-5 text-sm opacity-90">
