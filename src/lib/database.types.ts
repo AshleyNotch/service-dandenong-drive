@@ -95,6 +95,20 @@ export type Database = {
         };
         Relationships: [];
       };
+      pending_admins: {
+        Row: {
+          email: string;
+          invited_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          email: string;
+          invited_by?: string | null;
+          created_at?: string;
+        };
+        Update: Record<string, never>;
+        Relationships: [];
+      };
       blocked_slots: {
         Row: {
           id: string;
