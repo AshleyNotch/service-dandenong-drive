@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Contact, Booking, QuoteRequest } from "@/lib/database.types";
 import { cn } from "@/lib/utils";
-import { Search, X, Mail, Phone, Calendar, MessageSquare } from "lucide-react";
+import { Search, X, Mail, Phone, Calendar, MessageSquare, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/contacts")({
   component: ContactsPage,
@@ -24,6 +24,7 @@ function ContactsPage() {
   const [loading, setLoading]       = useState(true);
   const [search, setSearch]         = useState("");
   const [selected, setSelected]     = useState<Contact | null>(null);
+  const [deleting, setDeleting]     = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -51,6 +52,15 @@ function ContactsPage() {
   const contactQuotes = selected
     ? quotes.filter(q => q.email === selected.email)
     : [];
+
+  async function deleteContact(id: string) {
+    if (!confirm("Delete this contact? Their booking and quote history will remain.")) return;
+    setDeleting(id);
+    await supabase.from("contacts").delete().eq("id", id);
+    setContacts(prev => prev.filter(c => c.id !== id));
+    if (selected?.id === id) setSelected(null);
+    setDeleting(null);
+  }
 
   const totalSpend = contactBookings
     .filter(b => b.cost != null)
@@ -143,9 +153,19 @@ function ContactsPage() {
                   </p>
                 </div>
               </div>
-              <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground transition">
-                <X size={16} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => deleteContact(selected.id)}
+                  disabled={deleting === selected.id}
+                  className="flex items-center gap-1.5 rounded-lg border border-red-400/20 bg-red-400/5 px-3 py-1.5 font-mono-tag text-[10px] text-red-400 transition hover:bg-red-400/10 disabled:opacity-30"
+                >
+                  <Trash2 size={11} />
+                  {deleting === selected.id ? "…" : "Delete"}
+                </button>
+                <button onClick={() => setSelected(null)} className="text-muted-foreground hover:text-foreground transition">
+                  <X size={16} />
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 space-y-6 p-6">

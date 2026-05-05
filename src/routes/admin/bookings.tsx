@@ -12,7 +12,7 @@ export const Route = createFileRoute("/admin/bookings")({
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const SERVICES = ["Roadworthy Inspections", "Mechanical Repairs", "Log Book Servicing", "Vehicle Diagnostics"];
-const STATUSES: BookingStatus[] = ["pending", "confirmed", "cancelled", "completed"];
+const STATUSES: BookingStatus[] = ["pending", "confirmed", "cancelled"];
 
 const ALL_SLOTS = [
   "7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM",
@@ -52,7 +52,9 @@ function BookingsPage() {
   const [markingDone, setMarkingDone]   = useState(false);
 
   useEffect(() => {
-    supabase.from("bookings").select("*").order("date", { ascending: false })
+    supabase.from("bookings").select("*")
+      .neq("status", "completed")
+      .order("date", { ascending: false })
       .then(({ data }) => { setBookings(data ?? []); setLoading(false); });
   }, []);
 

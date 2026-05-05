@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Profile, Role } from "@/lib/database.types";
 import { useAuth } from "@/hooks/use-auth";
-import { ShieldCheck, Shield, User, Send } from "lucide-react";
+import { ShieldCheck, Shield, User, Send, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/admin/users")({
@@ -28,6 +28,7 @@ function UsersPage() {
   const [users, setUsers]        = useState<Profile[]>([]);
   const [loading, setLoading]    = useState(true);
   const [updating, setUpdating]  = useState<string | null>(null);
+  const [deleting, setDeleting]  = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviting, setInviting]  = useState(false);
   const [inviteSent, setInviteSent] = useState(false);
@@ -72,6 +73,14 @@ function UsersPage() {
     setInviteSent(true);
     setInviteEmail("");
     setTimeout(() => setInviteSent(false), 5000);
+  }
+
+  async function deleteUser(id: string) {
+    if (!confirm("Remove this user from the system? They will lose all access.")) return;
+    setDeleting(id);
+    await supabase.from("profiles").delete().eq("id", id);
+    setUsers(prev => prev.filter(u => u.id !== id));
+    setDeleting(null);
   }
 
   async function setRole(id: string, role: Role) {
@@ -150,26 +159,37 @@ function UsersPage() {
                     {new Date(u.created_at).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" })}
                   </td>
                   <td className="px-5 py-3.5">
-                    {isMe || isSA ? (
-                      <span className="font-mono-tag text-[10px] text-muted-foreground">—</span>
-                    ) : (
-                      <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
+                      {!isMe && !isSA && (
+                        <>
+                          <button
+                            disabled={u.role === "admin" || updating === u.id}
+                            onClick={() => setRole(u.id, "admin")}
+                            className="rounded-lg border border-blue-400/20 bg-blue-400/5 px-3 py-1.5 font-mono-tag text-[10px] text-blue-400 transition hover:bg-blue-400/10 disabled:opacity-30"
+                          >
+                            {updating === u.id ? "…" : "Make admin"}
+                          </button>
+                          <button
+                            disabled={u.role === "user" || updating === u.id}
+                            onClick={() => setRole(u.id, "user")}
+                            className="rounded-lg border border-white/10 px-3 py-1.5 font-mono-tag text-[10px] text-muted-foreground transition hover:border-white/30 disabled:opacity-30"
+                          >
+                            {updating === u.id ? "…" : "Remove admin"}
+                          </button>
+                        </>
+                      )}
+                      {!isMe && !isSA && (
                         <button
-                          disabled={u.role === "admin" || updating === u.id}
-                          onClick={() => setRole(u.id, "admin")}
-                          className="rounded-lg border border-blue-400/20 bg-blue-400/5 px-3 py-1.5 font-mono-tag text-[10px] text-blue-400 transition hover:bg-blue-400/10 disabled:opacity-30"
+                          disabled={deleting === u.id}
+                          onClick={() => deleteUser(u.id)}
+                          className="flex items-center gap-1.5 rounded-lg border border-red-400/20 bg-red-400/5 px-3 py-1.5 font-mono-tag text-[10px] text-red-400 transition hover:bg-red-400/10 disabled:opacity-30"
                         >
-                          {updating === u.id ? "…" : "Make admin"}
+                          <Trash2 size={11} />
+                          {deleting === u.id ? "…" : "Delete"}
                         </button>
-                        <button
-                          disabled={u.role === "user" || updating === u.id}
-                          onClick={() => setRole(u.id, "user")}
-                          className="rounded-lg border border-white/10 px-3 py-1.5 font-mono-tag text-[10px] text-muted-foreground transition hover:border-white/30 disabled:opacity-30"
-                        >
-                          {updating === u.id ? "…" : "Remove admin"}
-                        </button>
-                      </div>
-                    )}
+                      )}
+                      {isMe && <span className="font-mono-tag text-[10px] text-muted-foreground">—</span>}
+                    </div>
                   </td>
                 </tr>
               );

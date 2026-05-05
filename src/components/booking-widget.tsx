@@ -340,7 +340,7 @@ export function BookingWidget() {
                   disabled={!step4ok || submitting}
                   onClick={async () => {
                     setSubmitting(true);
-                    await supabase.from("bookings").insert({
+                    const { data: inserted } = await supabase.from("bookings").insert({
                       date:     booking.date!.toISOString().split("T")[0],
                       time:     booking.time!,
                       services: booking.services,
@@ -351,7 +351,17 @@ export function BookingWidget() {
                       name:     booking.name,
                       phone:    booking.phone,
                       email:    booking.email,
-                    });
+                    }).select().single();
+
+                    // Send confirmation email (fire-and-forget)
+                    if (inserted) {
+                      fetch("/api/send-booking-confirmation", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(inserted),
+                      }).catch(() => {});
+                    }
+
                     setSubmitting(false);
                     setConfirmed(true);
                     confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ["#fcbb04", "#ffffff", "#000000"] });

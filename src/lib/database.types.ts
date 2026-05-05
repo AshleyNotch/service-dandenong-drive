@@ -86,6 +86,8 @@ export type Database = {
           email: string;
           notes: string | null;
           admin_notes: string | null;
+          quote_delivery: "email" | "whatsapp";
+          whatsapp_number: string | null;
           status: "pending" | "sent" | "completed";
           created_at: string;
         };
@@ -101,6 +103,8 @@ export type Database = {
           email: string;
           notes?: string | null;
           admin_notes?: string | null;
+          quote_delivery?: "email" | "whatsapp";
+          whatsapp_number?: string | null;
           status?: "pending" | "sent" | "completed";
           created_at?: string;
         };

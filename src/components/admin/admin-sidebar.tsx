@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, Calendar, MessageSquare, Clock, Users, LogOut, ShieldCheck, BookUser } from "lucide-react";
+import { LayoutDashboard, Calendar, MessageSquare, Clock, Users, LogOut, ShieldCheck, BookUser, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import logo from "@/assets/logo.png";
@@ -7,6 +7,7 @@ import logo from "@/assets/logo.png";
 const nav = [
   { href: "/admin/dashboard",  label: "Dashboard",    icon: LayoutDashboard },
   { href: "/admin/bookings",   label: "Bookings",     icon: Calendar },
+  { href: "/admin/completed",  label: "Completed",    icon: CheckCircle2 },
   { href: "/admin/inquiries",  label: "Inquiries",    icon: MessageSquare },
   { href: "/admin/contacts",   label: "Contacts",     icon: BookUser },
   { href: "/admin/slots",      label: "Manage Slots", icon: Clock },
