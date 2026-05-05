@@ -135,10 +135,96 @@ export function BookingWidget() {
 
   // ── Confirmed ──────────────────────────────────────────────────────────────
 
+  function downloadTicketPDF() {
+    const ref = Math.random().toString(36).slice(2, 10).toUpperCase();
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&color=ffffff&bgcolor=0a0a0a&data=MACCITY-${ref}&margin=10`;
+    const win = window.open("", "_blank");
+    if (!win) return;
+    win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Mac City — Booking Ticket</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0a0a; font-family:'Arial Black',Arial,sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:32px; }
+  .ticket { background:#0a0a0a; border:1px solid #222; border-radius:24px; width:100%; max-width:400px; overflow:hidden; }
+  .top { padding:32px 32px 24px; }
+  .brand { font-size:88px; font-weight:900; color:#fff; line-height:0.85; letter-spacing:-4px; font-family:'Arial Black',Arial,sans-serif; }
+  .services { margin-top:20px; font-size:15px; color:#fcbb04; font-weight:700; font-family:'Helvetica Neue',Arial,sans-serif; line-height:1.5; }
+  .divider { border-top:2px dashed #222; margin:24px 0; }
+  .bottom { padding:0 32px 32px; font-family:'Helvetica Neue',Arial,sans-serif; }
+  .info-row { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+  .info-block {}
+  .info-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#555; margin-bottom:3px; }
+  .info-value { font-size:13px; font-weight:700; color:#fff; }
+  .qr-wrap { display:flex; justify-content:center; margin-top:24px; }
+  .qr-wrap img { border-radius:12px; }
+  .ref { text-align:center; margin-top:10px; font-size:10px; letter-spacing:3px; color:#444; font-family:'Helvetica Neue',Arial,sans-serif; }
+  @media print {
+    body { padding:0; background:#0a0a0a; }
+    .no-print { display:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="ticket">
+  <div class="top">
+    <div class="brand">MAC<br/>CITY</div>
+    <div class="services">${booking.services.join(" + ")}</div>
+    <div class="services" style="color:#888;font-size:13px;margin-top:6px;">${booking.year} ${booking.make} ${booking.model}</div>
+  </div>
+  <div style="padding:0 32px;">
+    <div class="divider"></div>
+  </div>
+  <div class="bottom">
+    <div class="info-row">
+      <div class="info-block">
+        <div class="info-label">Date</div>
+        <div class="info-value">${summaryDate}</div>
+      </div>
+      <div class="info-block" style="text-align:right;">
+        <div class="info-label">Time</div>
+        <div class="info-value">${booking.time}</div>
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-block">
+        <div class="info-label">Name</div>
+        <div class="info-value">${booking.name}</div>
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-block">
+        <div class="info-label">Phone</div>
+        <div class="info-value">${booking.phone}</div>
+      </div>
+      <div class="info-block" style="text-align:right;">
+        <div class="info-label">Email</div>
+        <div class="info-value" style="font-size:11px;">${booking.email}</div>
+      </div>
+    </div>
+    <div class="qr-wrap">
+      <img src="${qrUrl}" width="120" height="120" alt="QR" />
+    </div>
+    <div class="ref">#${ref}</div>
+  </div>
+</div>
+<div class="no-print" style="text-align:center;margin-top:24px;">
+  <button onclick="window.print()" style="background:#fcbb04;color:#000;border:none;padding:12px 28px;font-size:14px;font-weight:900;border-radius:100px;cursor:pointer;font-family:'Arial Black',Arial,sans-serif;">
+    Save as PDF
+  </button>
+</div>
+<script>window.onload = () => window.print();</script>
+</body>
+</html>`);
+    win.document.close();
+  }
+
   if (confirmed) {
     return (
       <div className="overflow-hidden rounded-2xl border border-white/10">
-        <div className="flex min-h-[420px] flex-col items-center justify-center p-12 text-center">
+        <div className="flex min-h-[420px] flex-col items-center justify-center p-10 text-center">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#fcbb04]/15 text-[#fcbb04] text-2xl">✓</div>
           <h3 className="mt-6 font-display text-3xl">Booking received</h3>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
@@ -146,12 +232,20 @@ export function BookingWidget() {
             {summaryDate} at {booking.time} slot via{" "}
             <span className="text-foreground">{booking.email}</span>.
           </p>
-          <button
-            onClick={() => { setBooking(empty); setStep(1); setConfirmed(false); }}
-            className="mt-8 rounded-full border border-white/10 px-6 py-2.5 text-sm hover:border-white/30 transition"
-          >
-            Book another service
-          </button>
+          <div className="mt-8 flex gap-3">
+            <button
+              onClick={downloadTicketPDF}
+              className="rounded-full bg-[#fcbb04] px-6 py-2.5 text-sm font-semibold text-black hover:opacity-90 transition"
+            >
+              Download Ticket PDF
+            </button>
+            <button
+              onClick={() => { setBooking(empty); setStep(1); setConfirmed(false); }}
+              className="rounded-full border border-white/10 px-6 py-2.5 text-sm hover:border-white/30 transition"
+            >
+              Book another
+            </button>
+          </div>
         </div>
       </div>
     );
