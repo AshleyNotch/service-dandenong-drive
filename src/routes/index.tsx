@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection, homeReviews } from "@/components/testimonials-section";
 import { BookingWidget } from "@/components/booking-widget";
+import { GetAQuoteSection } from "@/components/quote-modal";
 import heroImg from "@/assets/hero-workshop.jpg";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
@@ -123,6 +124,8 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <GetAQuoteSection />
 
       {/* BOOKING */}
       <section id="book" className="bg-background py-24">

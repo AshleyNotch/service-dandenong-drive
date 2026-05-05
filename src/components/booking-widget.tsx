@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Calendar, Clock, Wrench, Car, User, Mail, Phone, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
+import confetti from "canvas-confetti";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -98,9 +99,10 @@ export function BookingWidget() {
       ? booking.services.filter(x => x !== s)
       : [...booking.services, s]);
 
-  const step1ok = booking.date !== null && booking.time !== null && booking.services.length > 0;
-  const step2ok = booking.make.trim() !== "" && booking.model.trim() !== "" && booking.year.trim() !== "";
-  const step3ok = booking.name.trim() !== "" && booking.phone.trim() !== "" && booking.email.trim() !== "";
+  const step1ok = booking.services.length > 0;
+  const step2ok = booking.date !== null && booking.time !== null;
+  const step3ok = booking.make.trim() !== "" && booking.model.trim() !== "" && booking.year.trim() !== "";
+  const step4ok = booking.name.trim() !== "" && booking.phone.trim() !== "" && booking.email.trim() !== "";
 
   const summaryDate = booking.date?.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" });
 
@@ -128,7 +130,7 @@ export function BookingWidget() {
     );
   }
 
-  const steps = ["Date & Service", "Your Vehicle", "Your Details"];
+  const steps = ["Services", "Date & Time", "Your Vehicle", "Your Details"];
 
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10">
@@ -138,7 +140,7 @@ export function BookingWidget() {
         <div className="p-8 md:p-10">
 
           {/* Step indicator */}
-          <div className="mb-8 flex items-center gap-4">
+          <div className="mb-8 flex items-center gap-3">
             {steps.map((label, i) => {
               const n = i + 1;
               const active = step === n;
@@ -146,19 +148,44 @@ export function BookingWidget() {
               return (
                 <div key={n} className={cn("flex items-center gap-2 text-xs font-mono-tag transition", active ? "opacity-100" : "opacity-35")}>
                   <span className={cn(
-                    "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold",
+                    "flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold shrink-0",
                     done || active ? "bg-[#fcbb04] text-black" : "border border-white/20"
                   )}>
                     {done ? "✓" : n}
                   </span>
                   <span className="hidden sm:inline">{label}</span>
+                  {n < steps.length && <span className="hidden sm:inline text-white/20 ml-1">·</span>}
                 </div>
               );
             })}
           </div>
 
-          {/* ─ STEP 1 ───────────────────────────────────────────────────── */}
+          {/* ─ STEP 1 — Services ────────────────────────────────────────── */}
           {step === 1 && (
+            <>
+              <p className="mb-5 font-mono-tag text-xs text-muted-foreground">↳ Select one or more services</p>
+              <div className="mb-8 grid grid-cols-2 gap-3">
+                {SERVICES.map(s => (
+                  <button key={s} onClick={() => toggleService(s)}
+                    className={cn(
+                      "rounded-xl border px-4 py-4 text-left text-sm transition",
+                      booking.services.includes(s)
+                        ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
+                        : "border-white/10 hover:border-white/25"
+                    )}>
+                    {s}
+                  </button>
+                ))}
+              </div>
+              <button disabled={!step1ok} onClick={() => setStep(2)}
+                className="w-full rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
+                Continue →
+              </button>
+            </>
+          )}
+
+          {/* ─ STEP 2 — Date & Time ─────────────────────────────────────── */}
+          {step === 2 && (
             <>
               {/* Date */}
               <div className="mb-4 flex items-center justify-between">
@@ -221,35 +248,18 @@ export function BookingWidget() {
                 </div>
               )}
 
-              {/* Services — revealed after time */}
-              {booking.time && (
-                <div className="mb-8">
-                  <p className="mb-3 font-mono-tag text-xs text-muted-foreground">↳ Select services</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {SERVICES.map(s => (
-                      <button key={s} onClick={() => toggleService(s)}
-                        className={cn(
-                          "rounded-xl border px-4 py-3 text-left text-sm transition",
-                          booking.services.includes(s)
-                            ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
-                            : "border-white/10 hover:border-white/25"
-                        )}>
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <button disabled={!step1ok} onClick={() => setStep(2)}
-                className="w-full rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
-                Continue →
-              </button>
+              <div className="flex gap-3">
+                <button onClick={() => setStep(1)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
+                <button disabled={!step2ok} onClick={() => setStep(3)}
+                  className="flex-1 rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
+                  Continue →
+                </button>
+              </div>
             </>
           )}
 
-          {/* ─ STEP 2 ───────────────────────────────────────────────────── */}
-          {step === 2 && (
+          {/* ─ STEP 3 — Vehicle Details ──────────────────────────────────── */}
+          {step === 3 && (
             <>
               <p className="mb-6 font-mono-tag text-xs text-muted-foreground">↳ Vehicle details</p>
               <div className="space-y-4">
@@ -271,8 +281,8 @@ export function BookingWidget() {
                 </div>
               </div>
               <div className="mt-8 flex gap-3">
-                <button onClick={() => setStep(1)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
-                <button disabled={!step2ok} onClick={() => setStep(3)}
+                <button onClick={() => setStep(2)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
+                <button disabled={!step3ok} onClick={() => setStep(4)}
                   className="flex-1 rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
                   Continue →
                 </button>
@@ -280,8 +290,8 @@ export function BookingWidget() {
             </>
           )}
 
-          {/* ─ STEP 3 ───────────────────────────────────────────────────── */}
-          {step === 3 && (
+          {/* ─ STEP 4 — Client Details ───────────────────────────────────── */}
+          {step === 4 && (
             <>
               <p className="mb-6 font-mono-tag text-xs text-muted-foreground">↳ Your details</p>
               <div className="space-y-4">
@@ -298,8 +308,8 @@ export function BookingWidget() {
                 </div>
               </div>
               <div className="mt-8 flex gap-3">
-                <button onClick={() => setStep(2)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
-                <button disabled={!step3ok} onClick={() => setConfirmed(true)}
+                <button onClick={() => setStep(3)} className="rounded-xl border border-white/10 px-6 py-3.5 text-sm hover:border-white/30 transition">← Back</button>
+                <button disabled={!step4ok} onClick={() => { setConfirmed(true); confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 }, colors: ["#fcbb04", "#ffffff", "#000000"] }); }}
                   className="flex-1 rounded-xl bg-[#fcbb04] py-3.5 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-25 disabled:cursor-not-allowed">
                   Confirm Booking ✓
                 </button>
@@ -317,6 +327,13 @@ export function BookingWidget() {
           ) : (
             <div className="space-y-5 text-sm">
 
+              {booking.services.length > 0 && (
+                <SummaryRow icon={<Wrench size={15} />}>
+                  <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Services</p>
+                  {booking.services.map(s => <p key={s}>{s}</p>)}
+                </SummaryRow>
+              )}
+
               {booking.date && (
                 <SummaryRow icon={<Calendar size={15} />}>
                   <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Date</p>
@@ -328,13 +345,6 @@ export function BookingWidget() {
                 <SummaryRow icon={<Clock size={15} />}>
                   <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Time</p>
                   <p>{booking.time}</p>
-                </SummaryRow>
-              )}
-
-              {booking.services.length > 0 && (
-                <SummaryRow icon={<Wrench size={15} />}>
-                  <p className="font-mono-tag text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Services</p>
-                  {booking.services.map(s => <p key={s}>{s}</p>)}
                 </SummaryRow>
               )}
 
