@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { TestimonialsSection, homeReviews } from "@/components/testimonials-section";
 import { BookingWidget } from "@/components/booking-widget";
 import heroImg from "@/assets/hero-workshop.jpg";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
@@ -134,6 +135,7 @@ function Home() {
         </div>
       </section>
 
+      <TestimonialsSection reviews={homeReviews} />
       <SiteFooter />
     </>
   );

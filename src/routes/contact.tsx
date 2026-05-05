@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { TestimonialsSection, contactReviews } from "@/components/testimonials-section";
 import heroImg from "@/assets/contact-hero.webp";
 
 export const Route = createFileRoute("/contact")({
@@ -108,6 +109,7 @@ function ContactPage() {
         </div>
       </section>
 
+      <TestimonialsSection reviews={contactReviews} />
       <SiteFooter />
     </div>
   );

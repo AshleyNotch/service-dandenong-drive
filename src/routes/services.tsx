@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { TestimonialsSection, servicesReviews } from "@/components/testimonials-section";
 import heroImg from "@/assets/workshop-exterior.webp";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
@@ -118,6 +119,7 @@ function ServicesPage() {
         </div>
       </section>
 
+      <TestimonialsSection reviews={servicesReviews} />
       <SiteFooter />
     </div>
   );
