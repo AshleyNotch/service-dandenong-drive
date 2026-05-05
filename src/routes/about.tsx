@@ -33,7 +33,7 @@ function AboutPage() {
 
         <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
           <p className="font-mono-tag mb-6 text-white/60">↳ About us</p>
-          <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
+          <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[6.5rem] lg:text-[7rem]">
             A workshop built<br />
             <span className="italic text-[#fcbb04]">on trust.</span>
           </h1>

@@ -66,7 +66,7 @@ function ServicesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
         <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
           <p className="font-mono-tag mb-6 text-white/60">↳ Services</p>
-          <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
+          <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[6.5rem] lg:text-[7rem]">
             What we do<br />
             <span className="italic text-[#fcbb04]">under one roof</span>
           </h1>
