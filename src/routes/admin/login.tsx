@@ -10,11 +10,12 @@ export const Route = createFileRoute("/admin/login")({
 
 function AdminLogin() {
   const navigate   = useNavigate();
-  const { session, profile, loading } = useAuth();
-  const [email, setEmail]   = useState("");
-  const [sent, setSent]     = useState(false);
-  const [working, setWorking] = useState(false);
-  const [error, setError]   = useState<string | null>(null);
+  const { session, profile, loading, signOut, refetchProfile } = useAuth();
+  const [email, setEmail]       = useState("");
+  const [sent, setSent]         = useState(false);
+  const [working, setWorking]   = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [error, setError]       = useState<string | null>(null);
 
   // Redirect if already authenticated as admin
   useEffect(() => {
@@ -24,6 +25,37 @@ function AdminLogin() {
       }
     }
   }, [session, profile, loading]);
+
+  // Logged in but only has user role — show pending screen
+  if (!loading && session && profile && profile.role === "user") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] px-4">
+        <div className="w-full max-w-sm text-center space-y-6">
+          <img src={logo} alt="Mac City" className="h-12 w-auto mx-auto" />
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 space-y-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-400/10 text-yellow-400 mx-auto text-xl">⏳</div>
+            <h2 className="font-display text-xl">Access pending</h2>
+            <p className="text-sm text-muted-foreground">
+              You're signed in as <span className="text-foreground">{profile.email}</span> but you don't have admin access yet. Ask the super admin to approve your account, then click below.
+            </p>
+            <button
+              onClick={async () => { setChecking(true); await refetchProfile(); setChecking(false); }}
+              disabled={checking}
+              className="w-full rounded-xl bg-[#fcbb04] py-3 text-sm font-semibold text-black transition hover:opacity-90 disabled:opacity-50"
+            >
+              {checking ? "Checking…" : "I've been approved — check again"}
+            </button>
+            <button
+              onClick={async () => { await signOut(); }}
+              className="w-full rounded-xl border border-white/10 py-3 text-sm text-muted-foreground transition hover:border-white/30"
+            >
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const redirectTo = `${window.location.origin}/admin/dashboard`;
 
