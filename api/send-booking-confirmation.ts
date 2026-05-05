@@ -107,7 +107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Mac City <onboarding@resend.dev>",
+        from: "Mac City <bookings@maccity.com.au>",
         to: b.email,
         subject: `Booking Confirmed — ${dateStr} at ${b.time}`,
         html,

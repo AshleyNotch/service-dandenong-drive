@@ -340,7 +340,8 @@ export function BookingWidget() {
                   disabled={!step4ok || submitting}
                   onClick={async () => {
                     setSubmitting(true);
-                    const { data: inserted } = await supabase.from("bookings").insert({
+                    const payload = {
+                      id:       crypto.randomUUID(),
                       date:     booking.date!.toISOString().split("T")[0],
                       time:     booking.time!,
                       services: booking.services,
@@ -351,16 +352,16 @@ export function BookingWidget() {
                       name:     booking.name,
                       phone:    booking.phone,
                       email:    booking.email,
-                    }).select().single();
+                    };
+
+                    await supabase.from("bookings").insert(payload);
 
                     // Send confirmation email (fire-and-forget)
-                    if (inserted) {
-                      fetch("/api/send-booking-confirmation", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(inserted),
-                      }).catch(() => {});
-                    }
+                    fetch("/api/send-booking-confirmation", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(payload),
+                    }).catch(() => {});
 
                     setSubmitting(false);
                     setConfirmed(true);
