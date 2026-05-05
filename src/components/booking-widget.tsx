@@ -44,6 +44,14 @@ const empty: Booking = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+// Always format using local time — toISOString() shifts to UTC and breaks date comparisons in AU timezone
+function toDateStr(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 function weekMonday(offset: number): Date {
   const d = new Date();
   const day = d.getDay();
@@ -120,22 +128,22 @@ export function BookingWidget() {
 
   // Fetch blocked slots for the visible week on mount and when week changes
   useEffect(() => {
-    const from = monday.toISOString().split("T")[0];
-    const to   = new Date(monday.getTime() + 6 * 86400000).toISOString().split("T")[0];
+    const from = toDateStr(monday);
+    const to   = toDateStr(new Date(monday.getTime() + 6 * 86400000));
     supabase.from("blocked_slots").select("date,time").gte("date", from).lte("date", to)
       .then(({ data }) => setBlockedSlots(data ?? []));
   }, [weekOff]);
 
   // Fetch booked times when date is selected
   async function fetchAvailability(date: Date) {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = toDateStr(date);
     const { data } = await supabase.rpc("get_booked_times", { p_date: dateStr });
     setBookedTimes((data ?? []).map((r: { booked_time: string }) => r.booked_time));
   }
 
   // Check if a full day is blocked
   function isDayBlocked(date: Date) {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = toDateStr(date);
     return blockedSlots.some(s => s.date === dateStr && s.time === null);
   }
 
@@ -143,7 +151,7 @@ export function BookingWidget() {
   function isTimeUnavailable(time: string) {
     if (bookedTimes.includes(time)) return true;
     if (!booking.date) return false;
-    const dateStr = booking.date.toISOString().split("T")[0];
+    const dateStr = toDateStr(booking.date);
     return blockedSlots.some(s => s.date === dateStr && s.time === time);
   }
 
@@ -474,7 +482,7 @@ export function BookingWidget() {
                     setSubmitting(true);
                     const payload = {
                       id:       crypto.randomUUID(),
-                      date:     booking.date!.toISOString().split("T")[0],
+                      date:     toDateStr(booking.date!),
                       time:     booking.time!,
                       services: booking.services,
                       make:     booking.make,
