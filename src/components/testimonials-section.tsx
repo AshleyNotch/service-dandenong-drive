@@ -165,6 +165,8 @@ export const contactReviews: Review[] = [
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+import { useState } from "react";
+
 function Stars() {
   return (
     <div className="flex gap-0.5">
@@ -176,18 +178,24 @@ function Stars() {
 }
 
 function Avatar({ src, name }: { src: string; name: string }) {
+  const [failed, setFailed] = useState(false);
   const initials = name.split(" ").map(n => n[0]).join("").toUpperCase();
   return (
-    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-white/10">
-      <img
-        src={src}
-        alt={name}
-        className="h-full w-full object-cover"
-        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-      />
-      <span className="absolute inset-0 flex items-center justify-center font-mono-tag text-xs text-white/60">
-        {initials}
-      </span>
+    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-white/10 select-none">
+      {failed ? (
+        <span className="absolute inset-0 flex items-center justify-center font-mono-tag text-xs text-white/60">
+          {initials}
+        </span>
+      ) : (
+        <img
+          src={src}
+          alt={name}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          onError={() => setFailed(true)}
+          className="h-full w-full object-cover pointer-events-none"
+        />
+      )}
     </div>
   );
 }
