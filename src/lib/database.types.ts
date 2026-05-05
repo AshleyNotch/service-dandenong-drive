@@ -171,7 +171,12 @@ export type Database = {
       };
     };
     Views: { [_ in never]: never };
-    Functions: { [_ in never]: never };
+    Functions: {
+      get_booked_times: {
+        Args: { p_date: string };
+        Returns: { booked_time: string }[];
+      };
+    };
     Enums: {
       user_role: "super_admin" | "admin" | "user";
       booking_status: "pending" | "confirmed" | "cancelled";

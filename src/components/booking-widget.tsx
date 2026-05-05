@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, Clock, Wrench, Car, User, Mail, Phone, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
 import confetti from "canvas-confetti";
@@ -103,18 +103,49 @@ function SummaryRow({ icon, children }: { icon: React.ReactNode; children: React
 // ─── Widget ───────────────────────────────────────────────────────────────────
 
 export function BookingWidget() {
-  const [step, setStep]           = useState(1);
-  const [weekOff, setWeekOff]     = useState(0);
-  const [booking, setBooking]     = useState<Booking>(empty);
-  const [confirmed, setConfirmed] = useState(false);
+  const [step, setStep]             = useState(1);
+  const [weekOff, setWeekOff]       = useState(0);
+  const [booking, setBooking]       = useState<Booking>(empty);
+  const [confirmed, setConfirmed]   = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [touched, setTouched]     = useState({ phone: false, email: false });
+  const [touched, setTouched]       = useState({ phone: false, email: false });
+  const [bookedTimes, setBookedTimes] = useState<string[]>([]);
+  const [blockedSlots, setBlockedSlots] = useState<{ date: string; time: string | null }[]>([]);
 
   const touch = (k: "phone" | "email") => setTouched(prev => ({ ...prev, [k]: true }));
 
   const today  = new Date(); today.setHours(0, 0, 0, 0);
   const monday = weekMonday(weekOff);
   const week   = Array.from({ length: 7 }, (_, i) => { const d = new Date(monday); d.setDate(monday.getDate() + i); return d; });
+
+  // Fetch blocked slots for the visible week on mount and when week changes
+  useEffect(() => {
+    const from = monday.toISOString().split("T")[0];
+    const to   = new Date(monday.getTime() + 6 * 86400000).toISOString().split("T")[0];
+    supabase.from("blocked_slots").select("date,time").gte("date", from).lte("date", to)
+      .then(({ data }) => setBlockedSlots(data ?? []));
+  }, [weekOff]);
+
+  // Fetch booked times when date is selected
+  async function fetchAvailability(date: Date) {
+    const dateStr = date.toISOString().split("T")[0];
+    const { data } = await supabase.rpc("get_booked_times", { p_date: dateStr });
+    setBookedTimes((data ?? []).map((r: { booked_time: string }) => r.booked_time));
+  }
+
+  // Check if a full day is blocked
+  function isDayBlocked(date: Date) {
+    const dateStr = date.toISOString().split("T")[0];
+    return blockedSlots.some(s => s.date === dateStr && s.time === null);
+  }
+
+  // Check if a specific time is unavailable (booked or blocked)
+  function isTimeUnavailable(time: string) {
+    if (bookedTimes.includes(time)) return true;
+    if (!booking.date) return false;
+    const dateStr = booking.date.toISOString().split("T")[0];
+    return blockedSlots.some(s => s.date === dateStr && s.time === time);
+  }
 
   const set = <K extends keyof Booking>(k: K, v: Booking[K]) =>
     setBooking(prev => ({ ...prev, [k]: v }));
@@ -327,17 +358,19 @@ export function BookingWidget() {
 
               <div className="mb-8 grid grid-cols-7 gap-1">
                 {week.map((d, i) => {
-                  const past  = d < today;
-                  const isSun = d.getDay() === 0;
-                  const sel   = booking.date?.toDateString() === d.toDateString();
+                  const past    = d < today;
+                  const isSun   = d.getDay() === 0;
+                  const blocked = isDayBlocked(d);
+                  const sel     = booking.date?.toDateString() === d.toDateString();
+                  const disabled = past || isSun || blocked;
                   return (
-                    <button key={i} disabled={past || isSun}
-                      onClick={() => setBooking(prev => ({ ...prev, date: d, time: null }))}
+                    <button key={i} disabled={disabled}
+                      onClick={() => { setBooking(prev => ({ ...prev, date: d, time: null })); fetchAvailability(d); }}
                       className={cn(
                         "flex flex-col items-center rounded-xl py-3 text-xs transition",
-                        sel                  ? "bg-[#fcbb04] text-black font-semibold" :
-                        (past || isSun)      ? "opacity-20 cursor-not-allowed" :
-                                               "border border-white/10 hover:border-white/30"
+                        sel      ? "bg-[#fcbb04] text-black font-semibold" :
+                        disabled ? "opacity-20 cursor-not-allowed" :
+                                   "border border-white/10 hover:border-white/30"
                       )}>
                       <span className="font-mono-tag text-[10px]">{DAY[d.getDay()]}</span>
                       <span className="mt-1 text-sm font-bold">{d.getDate()}</span>
@@ -354,15 +387,20 @@ export function BookingWidget() {
                     <div key={label}>
                       <p className="mb-2 font-mono-tag text-[10px] text-muted-foreground">{label}</p>
                       <div className="flex flex-wrap gap-2">
-                        {times.map(t => (
-                          <button key={t} onClick={() => set("time", t)}
-                            className={cn(
-                              "rounded-lg border px-3 py-2 text-sm transition",
-                              booking.time === t
-                                ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
-                                : "border-white/10 hover:border-white/30"
-                            )}>{t}</button>
-                        ))}
+                        {times.map(t => {
+                          const unavailable = isTimeUnavailable(t);
+                          return (
+                            <button key={t} disabled={unavailable} onClick={() => set("time", t)}
+                              className={cn(
+                                "rounded-lg border px-3 py-2 text-sm transition",
+                                unavailable
+                                  ? "border-white/5 opacity-30 cursor-not-allowed line-through"
+                                  : booking.time === t
+                                    ? "border-[#fcbb04] bg-[#fcbb04]/10 text-[#fcbb04]"
+                                    : "border-white/10 hover:border-white/30"
+                              )}>{t}</button>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
