@@ -35,7 +35,7 @@ function AboutPage() {
           <p className="font-mono-tag mb-6 text-white/60">↳ About us</p>
           <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[8rem] lg:text-[10rem]">
             A workshop built<br />
-            <span className="italic text-[#fcbb04]">on trust, not turnover.</span>
+            <span className="italic text-[#fcbb04]">on trust.</span>
           </h1>
           <div className="mt-12 max-w-md border-l border-white/40 pl-5 text-sm opacity-90">
             <span className="mr-2 inline-block">↳</span>
