@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import teamImg from "@/assets/about-team.jpg";
-import heroImg from "@/assets/mechanic-hands.jpg";
+import heroImg from "@/assets/mechanic-hands.webp";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
