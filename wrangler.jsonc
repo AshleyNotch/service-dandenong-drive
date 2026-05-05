@@ -1,5 +1,5 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "service-dandenong-drive",
+  "name": "maccity",
   "pages_build_output_dir": "dist"
 }
