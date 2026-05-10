@@ -26,7 +26,7 @@ export function SiteFooter() {
           <div className="md:col-span-4">
             <p className="font-mono-tag opacity-50">↳ Get in touch</p>
             <p className="mt-4 text-sm leading-relaxed opacity-90">
-              +61 426 899 272<br />
+              +61 0451 676 558<br />
               info@maccity.com.au
             </p>
             <a

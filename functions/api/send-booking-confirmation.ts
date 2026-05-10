@@ -1,8 +1,7 @@
-interface Env {
-  RESEND_API_KEY: string;
-}
-
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export const onRequestPost = async (context: {
+  request: Request;
+  env: { RESEND_API_KEY: string };
+}) => {
   const b = await context.request.json() as Record<string, any>;
 
   if (!b?.email) {
@@ -75,7 +74,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       <tr>
         <td style="background:#0e0e0e;border-top:1px solid #1a1a1a;padding:20px 36px;text-align:center;">
           <p style="margin:0;font-size:11px;color:#444;">1/7 England Street, Dandenong South VIC 3175</p>
-          <p style="margin:6px 0 0;font-size:11px;color:#444;">Need help? <a href="tel:+61426899272" style="color:#fcbb04;text-decoration:none;">+61 426 899 272</a></p>
+          <p style="margin:6px 0 0;font-size:11px;color:#444;">Need help? <a href="tel:+61426899272" style="color:#fcbb04;text-decoration:none;">+61 0451 676 558</a></p>
         </td>
       </tr>
     </table>

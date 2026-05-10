@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection, homeReviews } from "@/components/testimonials-section";
 import { BookingWidget } from "@/components/booking-widget";
-import { GetAQuoteSection } from "@/components/quote-modal";
+import { GetAQuoteSection, QuoteModal } from "@/components/quote-modal";
 import heroImg from "@/assets/hero-workshop.jpg";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
@@ -31,9 +32,12 @@ const services = [
 ];
 
 function Home() {
+  const [quoteOpen, setQuoteOpen] = useState(false);
+
   return (
     <>
       <SiteHeader variant="dark" />
+      <QuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
 
       {/* HERO */}
       <section className="relative min-h-[100svh] overflow-hidden bg-surface text-surface-foreground">
@@ -56,6 +60,18 @@ function Home() {
             <span className="mr-2 inline-block">↳</span>
             For over 15 years, Maccity Car Workshop has set the standard for
             independent vehicle servicing in Dandenong South.
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="#book"
+              className="inline-flex items-center gap-2 rounded-full bg-[#fcbb04] px-7 py-3.5 text-sm font-semibold text-black hover:opacity-90 transition">
+              Book an Appointment →
+            </a>
+            <button
+              onClick={() => setQuoteOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20 transition">
+              Ask for a Quotation
+            </button>
           </div>
         </div>
       </section>

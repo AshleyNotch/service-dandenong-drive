@@ -11,9 +11,9 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact Us | Mac City — Dandenong South Car Workshop" },
-      { name: "description", content: "Visit Mac City at 1/7 England Street, Dandenong South. Open Monday to Friday 7:30am–5:30pm and Saturday 8am–1pm. Call +61 426 899 272, email info@maccity.com.au or book your service online." },
+      { name: "description", content: "Visit Mac City at 1/7 England Street, Dandenong South. Open Monday to Friday 7:30am–5:30pm and Saturday 8am–1pm. Call +61 0451 676 558, email info@maccity.com.au or book your service online." },
       { property: "og:title", content: "Contact Us | Mac City — Dandenong South Car Workshop" },
-      { property: "og:description", content: "Visit Mac City at 1/7 England Street, Dandenong South. Open Monday to Friday 7:30am–5:30pm and Saturday 8am–1pm. Call +61 426 899 272, email info@maccity.com.au or book your service online." },
+      { property: "og:description", content: "Visit Mac City at 1/7 England Street, Dandenong South. Open Monday to Friday 7:30am–5:30pm and Saturday 8am–1pm. Call +61 0451 676 558, email info@maccity.com.au or book your service online." },
     ],
   }),
   component: ContactPage,
@@ -28,7 +28,7 @@ const details = [
   {
     icon: <Phone size={18} />,
     label: "Phone",
-    lines: ["+61 426 899 272"],
+    lines: ["+61 0451 676 558"],
   },
   {
     icon: <Mail size={18} />,

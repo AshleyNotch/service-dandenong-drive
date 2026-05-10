@@ -52,7 +52,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
       >
         <div className="container-page flex items-center justify-between py-5">
           <Link to="/">
-            <img src={logo} alt="Maccity" className="h-10 w-auto mx-2.5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
+            <img src={logo} alt="Maccity" className="h-[52px] w-auto mx-2.5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
           </Link>
 
           <button
@@ -153,7 +153,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
           <div>
             <p className="mb-2 font-mono-tag text-[10px] opacity-50">↳ Contact</p>
             <p className="leading-relaxed">
-              +61 426 899 272<br />
+              +61 0451 676 558<br />
               info@maccity.com.au
             </p>
           </div>
