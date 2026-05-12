@@ -53,6 +53,7 @@ export function SiteHeader({ variant = "light" }: { variant?: "light" | "dark" }
         <div className="container-page flex items-center justify-between py-5">
           <Link to="/">
             <img src={logo} alt="Maccity" className="h-[52px] w-auto mx-2.5 drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]" />
+            <span className="font-mono-tag text-[10px] tracking-widest opacity-60 mx-2.5">Mac City Automotive</span>
           </Link>
 
           <button

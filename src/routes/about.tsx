@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { TestimonialsSection, aboutReviews } from "@/components/testimonials-section";
 import { BookingWidget } from "@/components/booking-widget";
 import { GetAQuoteSection } from "@/components/quote-modal";
-import teamImg from "@/assets/about-team.jpg";
+import teamImg from "@/assets/about-team.webp";
 import heroImg from "@/assets/mechanic-hands.webp";
 
 export const Route = createFileRoute("/about")({

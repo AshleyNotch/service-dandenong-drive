@@ -10,7 +10,7 @@ import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
 import logbookImg from "@/assets/service-logbook.jpg";
 import diagnosticsImg from "@/assets/service-diagnostics.jpg";
-import teamImg from "@/assets/about-team.jpg";
+import teamImg from "@/assets/team.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({

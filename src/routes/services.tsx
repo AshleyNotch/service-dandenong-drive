@@ -5,10 +5,10 @@ import { TestimonialsSection, servicesReviews } from "@/components/testimonials-
 import { BookingWidget } from "@/components/booking-widget";
 import { GetAQuoteSection } from "@/components/quote-modal";
 import heroImg from "@/assets/workshop-exterior.webp";
-import roadworthyImg from "@/assets/service-roadworthy.jpg";
-import repairsImg from "@/assets/service-repairs.jpg";
-import logbookImg from "@/assets/service-logbook.jpg";
-import diagnosticsImg from "@/assets/service-diagnostics.jpg";
+import roadworthyImg from "@/assets/roadworthy.webp";
+import repairsImg from "@/assets/mechanical-repairs.JPG";
+import logbookImg from "@/assets/logbook-servicing.JPG";
+import diagnosticsImg from "@/assets/vehicle-system.JPG";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
