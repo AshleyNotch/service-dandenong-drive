@@ -6,6 +6,19 @@ import { BookingWidget } from "@/components/booking-widget";
 import { GetAQuoteSection } from "@/components/quote-modal";
 import teamImg from "@/assets/about-team.webp";
 import heroImg from "@/assets/mechanic-hands.webp";
+import ashenImg    from "@/assets/team/Ashen Wanigasekara.JPG";
+import dinukaImg   from "@/assets/team/Dinuka Madhusanka.JPG";
+import erangaImg   from "@/assets/team/Eranga Ravinath.JPG";
+import naveenImg   from "@/assets/team/Naveen Gunaratne.JPG";
+import pasinduImg  from "@/assets/team/Pasindu Liyanage.JPG";
+
+const teamMembers = [
+  { name: "Naveen Gunaratne",    img: naveenImg  },
+  { name: "Ashen Wanigasekara",  img: ashenImg   },
+  { name: "Eranga Ravinath",     img: erangaImg  },
+  { name: "Dinuka Madhusanka",   img: dinukaImg  },
+  { name: "Pasindu Liyanage",    img: pasinduImg },
+];
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -110,6 +123,31 @@ function AboutPage() {
           >
             Book a service ↳
           </a>
+        </div>
+      </section>
+
+      {/* TEAM */}
+      <section className="bg-background py-24">
+        <div className="container-page">
+          <p className="font-mono-tag text-xs text-muted-foreground">↳ The people behind the work</p>
+          <h2 className="mt-4 mb-14 font-display text-4xl leading-[1.02] md:text-5xl">
+            Meet the <span className="italic text-[#fcbb04]">team</span>
+          </h2>
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-5">
+            {teamMembers.map(({ name, img }) => (
+              <div key={name} className="flex flex-col items-center gap-4">
+                <div className="aspect-square w-full overflow-hidden rounded-2xl">
+                  <img
+                    src={img}
+                    alt={name}
+                    className="h-full w-full object-cover object-top"
+                    loading="lazy"
+                  />
+                </div>
+                <p className="text-center text-sm font-medium leading-snug">{name}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
