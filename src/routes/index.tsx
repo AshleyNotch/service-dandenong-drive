@@ -6,6 +6,8 @@ import { TestimonialsSection, homeReviews } from "@/components/testimonials-sect
 import { BookingWidget } from "@/components/booking-widget";
 import { GetAQuoteSection, QuoteModal } from "@/components/quote-modal";
 import heroImg from "@/assets/hero-workshop.jpg";
+import heroWebm from "@/assets/Maccity-Hero.webm";
+import heroMp4 from "@/assets/Maccity-Hero.mp4";
 import roadworthyImg from "@/assets/service-roadworthy.jpg";
 import repairsImg from "@/assets/service-repairs.jpg";
 import logbookImg from "@/assets/service-logbook.jpg";
@@ -41,14 +43,24 @@ function Home() {
 
       {/* HERO */}
       <section className="relative min-h-[100svh] overflow-hidden bg-surface text-surface-foreground">
+        {/* Fallback image shown while video loads */}
         <img
           src={heroImg}
-          alt="Maccity Car Workshop street view in Dandenong South"
-          width={1920}
-          height={1080}
+          alt=""
+          aria-hidden
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/60" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src={heroWebm} type="video/webm" />
+          <source src={heroMp4}  type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/80" />
 
         <div className="container-page relative flex min-h-[100svh] flex-col justify-end pb-20 pt-40">
           <h1 className="font-display text-[3.5rem] leading-[0.95] sm:text-7xl md:text-[6.5rem] lg:text-[7rem]">
